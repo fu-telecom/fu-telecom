@@ -1,0 +1,12 @@
+Trigger removed from buttonconfig:
+
+CREATE DEFINER=`asteriskuser`@`localhost` TRIGGER trg_buttonconfig BEFORE INSERT ON buttonconfig
+FOR EACH ROW
+BEGIN
+	IF NEW.`type` = 'line' THEN
+		IF (SELECT COUNT(*) FROM `sccpline` WHERE `sccpline`.`name` = NEW.`name`) = 0
+		THEN
+			UPDATE `Foreign key contraint violated: line does not exist in sccpline` SET x=1;
+		END IF;
+	END IF;
+END
