@@ -45,7 +45,7 @@ class PhoneProcessor extends Controller {
     //Removed deleted lines from system.
     $this->CleanupDeletedItems();
     //Remove numbers that no longer have assignments.
-    //TODO: This is a bit of a messy way to do this. 
+    //TODO: This is a bit of a messy way to do this.
     $this->RemoveUnassignedNumbers();
     //Remove any lines without corresponding button assignments
     $this->sccpProcessor->RemoveUnusedLines();
@@ -233,8 +233,9 @@ class PhoneProcessor extends Controller {
     $this->overallResult->unassignedCount = $unassignedList->GetCount();
 
     foreach ($unassignedList->GetList() as $number) {
-      $this->Log("Deleting (number): " . $number->number);
+      $this->Log("Deleting (number): " . $number->number . "<br>");
       $number->DeleteFromDB();
+      $this->sccpProcessor->RemoveExtensions($number->number);
     }
   }
 

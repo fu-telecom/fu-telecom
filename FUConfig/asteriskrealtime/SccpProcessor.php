@@ -120,17 +120,20 @@ class SccpProcessor {
 
     $sccpline->DeleteFromDB();
 
-    $this->RemoveExtensions($sccpline);
+    $this->RemoveSccplineExtensions($sccpline);
     $this->RemoveVoicemail($sccpline);
   }
 
+  private function RemoveSccplineExtensions($sccpline) {
+    $this->RemoveExtension($sccpline->id);
+  }
   //I could probably do this with cascade delete,
   //but I don't feel like testing.
-  private function RemoveExtensions($sccpline) {
-    $this->result->Log("RemoveExtensions() for " . $sccpline->id . "<br>");
+  public function RemoveExtensions($number) {
+    $this->result->Log("RemoveExtensions() for " . $number . "<br>");
 
     $extensionList = new ExtensionList();
-    $extensionList->LoadByExten($sccpline->id);
+    $extensionList->LoadByExten($number);
 
     foreach ($extensionList->GetList() as $extension) {
       $extension->DeleteFromDB();
