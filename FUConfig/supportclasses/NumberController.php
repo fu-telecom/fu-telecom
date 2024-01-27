@@ -173,7 +173,7 @@ class NumberController extends Controller {
 
 	//Check to see if callerid and number input fields are valid.
 	private function InputIsValid(): bool {
-		if (strlen($this->number) == 0 Or strlen($this->callerid) == 0 Or !filter_var($this->number, FILTER_VALIDATE_INT))
+		if (strlen($this->number) == 0 Or strlen($this->callerid) == 0 Or !is_numeric($this->number))
 		{
 			//Not valid!
 			$this->format_problem = 1; //Indicate a format error.

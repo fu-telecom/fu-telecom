@@ -170,7 +170,7 @@ class SipProcessor {
     $this->result->Log("AddToVoicemail() for " . $number->number . "<br>");
     $vm = new Voicemail();
     $vm->mailbox = $number->number;
-    $vm->password = $number->number;
+   // $vm->password = $number->number;
     $vm->fullname = $phone->GetOrg()->org_name;
     $vm->SaveToDB();
   }
