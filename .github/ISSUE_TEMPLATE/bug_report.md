@@ -1,6 +1,6 @@
 ---
 name: Bug report
-description: Use this to file a bug that you've found with our project.
+overview: Use this to file a bug that you've found with our project.
 labels: 'bug,needs-triage'
 ---
 
