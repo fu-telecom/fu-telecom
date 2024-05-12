@@ -2,43 +2,74 @@
 
 include_once ('FUConfig.php');
 
-$currentRequest = new PageRequest($_REQUEST);
+main();
 
-$org = new Org();
-$org->LoadFromPageRequest($currentRequest);
-var_dump($org);
+function main(): void
+{
+  $request = new PageRequest($_REQUEST);
+  $org = loadOrgFromRequest($request);
 
-if ($currentRequest->IsUpdateRequest() or $currentRequest->IsCreateRequest()) {
+  if ($request->IsUpdateRequest()) {
+    handleUpdateRequest($org);
+  } else if ($request->IsCreateRequest()) {
+    handleCreateRequest($org);
+  } else if ($request->IsDeleteRequest()) {
+    handleDeleteRequest($request, $org);
+  } else {
+    handleUnknownRequest();
+  }
+
+  Redirect('/index.php');
+}
+
+function handleUpdateRequest(Org $org): void
+{
   $org->SaveToDB();
-} else if ($currentRequest->IsDeleteRequest()) {
-  // First check to make sure there are no phones assigned.
-  $org_id = $currentRequest->GetID();
+}
 
+function handleCreateRequest(Org $org): void
+{
+  $org->SaveToDB();
+}
+
+function handleDeleteRequest(PageRequest $request, Org $org): void
+{
+  $org_id = $request->GetID();
+  throwIfOrgHasPhonesAssigned($org_id);
+
+  $org->LoadFromDB($org_id);
+  $org->DeleteFromDB();
+}
+
+function handleUnknownRequest(): void
+{
+  throwErrorWithMessage('Invalid request type');
+}
+
+function throwIfOrgHasPhonesAssigned(string $org_id): void
+{
   $phoneList = new PhoneList();
   $phoneList->LoadOrgPhones($org_id);
 
-  echo $phoneList->GetCount();
-
-  if ($phoneList->GetCount() == 0) {
-    $org->LoadFromDB($org_id);
-    $org->DeleteFromDB();
-  } else {
-    $trace = debug_backtrace();
-    trigger_error(
-      'Cannot delete org with assigned phones: ' .
-      ' in ' . $trace[0]['file'] .
-      ' on line ' . $trace[0]['line'],
-      E_USER_ERROR
-    );
+  if ($phoneList->GetCount() > 0) {
+    throwErrorWithMessage('Cannot delete org with assigned phones');
   }
-} else {
+}
+
+function loadOrgFromRequest(PageRequest $request): Org
+{
+  $org = new Org();
+  $org->LoadFromPageRequest($request);
+  return $org;
+}
+
+function throwErrorWithMessage(string $message): void
+{
   $trace = debug_backtrace();
   trigger_error(
-    'Invalid request type: ' .
+    $message . ':' .
     ' in ' . $trace[0]['file'] .
     ' on line ' . $trace[0]['line'],
     E_USER_ERROR
   );
 }
-
-Redirect('/index.php');
