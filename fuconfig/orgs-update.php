@@ -36,6 +36,7 @@ function handleDeleteRequest(PageRequest $request, Org $org): void
 {
   $org_id = $request->GetID();
   throwIfOrgHasPhonesAssigned($org_id);
+  throwIfOrgHasRoutersAssigned($org_id);
 
   $org->LoadFromDB($org_id);
   $org->DeleteFromDB();
@@ -53,6 +54,15 @@ function throwIfOrgHasPhonesAssigned(string $org_id): void
 
   if ($phoneList->GetCount() > 0) {
     throwErrorWithMessage('Cannot delete org with assigned phones');
+  }
+}
+function throwIfOrgHasRoutersAssigned(string $org_id): void
+{
+  $routerList = new RouterList();
+  $routerList->LoadByOrgId($org_id);
+
+  if ($routerList->GetCount() > 0) {
+    throwErrorWithMessage('Cannot delete org with assigned routers');
   }
 }
 
