@@ -1,5 +1,5 @@
 <?php
-include_once('FUConfig.php');
+include_once ('FUConfig.php');
 
 $currentRequest = new PageRequest($_REQUEST);
 
@@ -11,4 +11,4 @@ $routerHandler->CheckAndUpdateRouter($router);
 
 OutputXML($routerHandler->AsXML());
 
- ?>
+?>

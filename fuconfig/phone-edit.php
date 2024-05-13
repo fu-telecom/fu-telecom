@@ -1,7 +1,7 @@
-<?php 
+<?php
 
-include_once('includes/defaults.php');
-include_once('includes/db.php'); 
+include_once ('includes/defaults.php');
+include_once ('includes/db.php');
 
 
 //Data for Dropdowns
@@ -23,27 +23,26 @@ $phoneTypes = $pdo->query($typeQuery);
 $phoneModels = $pdo->query($modelQuery);
 $phoneInventoryTags = $pdo->query($inventoryTagsQuery);
 
-if (isset($_GET["edit"]))
-{
-	//Editing existing phone.
-	
-	$phoneDataQuery = "SELECT * FROM phones WHERE phone_id = :id";
-	
-	$numbersDataQuery = "SELECT numbers.* 
+if (isset($_GET["edit"])) {
+  //Editing existing phone.
+
+  $phoneDataQuery = "SELECT * FROM phones WHERE phone_id = :id";
+
+  $numbersDataQuery = "SELECT numbers.* 
 						FROM numbers
 						INNER JOIN phone_number_assignment 
 							ON numbers.number_id = phone_number_assignment.number_id
 						WHERE phone_number_assignment.phone_id = :phone
 						ORDER BY is_primary_number DESC";
-		
-			
-	
+
+
+
 } else {
-	//Adding new phone.
-	
-	$phone['phone_inventory_type_id'] = 0;
-	$phone['phone_inventory_model_id'] = 0;
-	
+  //Adding new phone.
+
+  $phone['phone_inventory_type_id'] = 0;
+  $phone['phone_inventory_model_id'] = 0;
+
 }
 
 
@@ -51,79 +50,77 @@ if (isset($_GET["edit"]))
 
 
 
-<?php include('includes/header.php'); ?>
+<?php include ('includes/header.php'); ?>
 
 
 
 
 
 <div class="container-fluid">
-	<div class="row mb-4">
-		<div class="col">
-			<?php if (isset($_GET['edit'])) { ?>
-			<h2 class="display-4">Edit Phone: <small class="text-muted"> ??? </small></h2>
-			<?php } else { ?>
-			<h2 class="display-4">Add Phone</h2>
-			<?php } ?>
-		</div>
-	</div>
-	
+  <div class="row mb-4">
+    <div class="col">
+      <?php if (isset($_GET['edit'])) { ?>
+        <h2 class="display-4">Edit Phone: <small class="text-muted"> ??? </small></h2>
+      <?php } else { ?>
+        <h2 class="display-4">Add Phone</h2>
+      <?php } ?>
+    </div>
+  </div>
 
-	
-	
-	<div class="row mt-2 ml-4">
-		<div class="col-1">Manually Enter Phone Data: </div>
-		<div class="col-3"></div>
-		
-	</div>
-	
-	
-	<div class="row mt-2 ml-4">
-		<div class="col-1">Type: </div>
-		<div class="col-3">
-			<select class="form-control" id="inventory_type" name="inventory_type">
-				<?php
-					while ($row = $phoneTypes->fetch())
-					{ 
-				?>
-					<option <?=$row['phone_type_id'] == $phone['phone_inventory_type_id'] ? 'selected="selected"' : '';?> 
-						value="<?=$row['phone_type_id'];?>"> 
-							<?=$row['phone_type_name'];?>
-					</option>
-				
-				<?php 
-					}
-				?>
-					
-			</select>
-		</div>
-	</div>
-	
-	<div class="row mt-2 ml-4">
-		<div class="col-1">Model: </div>
-		<div class="col-3">
-			<select class="form-control" id="inventory_model" name="inventory_model">
-				<?php
-					while ($row = $phoneModels->fetch())
-					{ 
-				?>
-					<option <?=$row['phone_model_id'] == $phone['phone_inventory_model_id'] ? 'selected="selected"' : '';?> 
-						value="<?=$row['phone_model_id'];?>"> 
-							<?=$row['phone_model_name'];?>
-					</option>
-				
-				
-				<?php 
-					}
-				?>
-					
-			</select>
-		</div>
-	</div>
 
-	
+
+
+  <div class="row mt-2 ml-4">
+    <div class="col-1">Manually Enter Phone Data: </div>
+    <div class="col-3"></div>
+
+  </div>
+
+
+  <div class="row mt-2 ml-4">
+    <div class="col-1">Type: </div>
+    <div class="col-3">
+      <select class="form-control" id="inventory_type" name="inventory_type">
+        <?php
+        while ($row = $phoneTypes->fetch()) {
+          ?>
+          <option <?= $row['phone_type_id'] == $phone['phone_inventory_type_id'] ? 'selected="selected"' : ''; ?>
+            value="<?= $row['phone_type_id']; ?>">
+            <?= $row['phone_type_name']; ?>
+          </option>
+
+          <?php
+        }
+        ?>
+
+      </select>
+    </div>
+  </div>
+
+  <div class="row mt-2 ml-4">
+    <div class="col-1">Model: </div>
+    <div class="col-3">
+      <select class="form-control" id="inventory_model" name="inventory_model">
+        <?php
+        while ($row = $phoneModels->fetch()) {
+          ?>
+          <option <?= $row['phone_model_id'] == $phone['phone_inventory_model_id'] ? 'selected="selected"' : ''; ?>
+            value="<?= $row['phone_model_id']; ?>">
+            <?= $row['phone_model_name']; ?>
+          </option>
+
+
+          <?php
+        }
+        ?>
+
+      </select>
+    </div>
+  </div>
+
+
 </div>
 
 
 
-<?php include('includes/footer.php'); ?>
+<?php include ('includes/footer.php'); ?>

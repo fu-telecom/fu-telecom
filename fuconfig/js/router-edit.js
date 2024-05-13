@@ -1,52 +1,52 @@
 function reloadRouter(routerId) {
   $.ajax({
-		method: "GET",
-		url: "routers-list.php?review=1&id=" + routerId,
-		dataType: 'html'
-	})
-	.done(function(data) {
-		$("#router_" + routerId).html(data);
-	})
-	.fail(function( jqXHR, textStatus ) {
-	   alert( "Reload router request failed: " + textStatus );
-	});
+    method: "GET",
+    url: "routers-list.php?review=1&id=" + routerId,
+    dataType: 'html'
+  })
+    .done(function (data) {
+      $("#router_" + routerId).html(data);
+    })
+    .fail(function (jqXHR, textStatus) {
+      alert("Reload router request failed: " + textStatus);
+    });
 }
 
 function editRouter(routerId) {
   $.ajax({
-			method: "POST",
-			url: "routers-edit.php",
-			data: { router_id: routerId, update: 1, request: 'edit' },
-			dataType: 'html'
-		})
-		.done(function(formData) {
-			setupRouterEditForm(formData, 'edit');
-		})
-		.fail(function( jqXHR, textStatus ) {
-		   alert( "Add new form request failed: " + textStatus );
-		});
+    method: "POST",
+    url: "routers-edit.php",
+    data: { router_id: routerId, update: 1, request: 'edit' },
+    dataType: 'html'
+  })
+    .done(function (formData) {
+      setupRouterEditForm(formData, 'edit');
+    })
+    .fail(function (jqXHR, textStatus) {
+      alert("Add new form request failed: " + textStatus);
+    });
 
-    return false;
+  return false;
 }
 
 function removeRouter(routerId) {
   $.ajax({
-			method: "POST",
-			url: "routers-edit-ajax.php",
-			data: { router_id: routerId, update: 1, request: 'remove' },
-			dataType: 'xml'
-		})
-		.done(function(formData) {
+    method: "POST",
+    url: "routers-edit-ajax.php",
+    data: { router_id: routerId, update: 1, request: 'remove' },
+    dataType: 'xml'
+  })
+    .done(function (formData) {
       //var routerid = $(xml).find('router_id').text();
 
       //reloadRouter(routerid);
       window.location.reload(false);
-		})
-		.fail(function( jqXHR, textStatus ) {
-		   alert( "Add new form request failed: " + textStatus );
-		});
+    })
+    .fail(function (jqXHR, textStatus) {
+      alert("Add new form request failed: " + textStatus);
+    });
 
-    return false;
+  return false;
 }
 
 function processRouterUpdate(routerId) {
@@ -66,12 +66,12 @@ function sendRouterUpdateRequest(routerId) {
   $("#routerUpdateAlert").hide();
 
   $.ajax({
-			method: "POST",
-			url: "routers-reload.php",
-			data: { router_id: routerId },
-			dataType: 'xml'
-		})
-		.done(function(xml) {
+    method: "POST",
+    url: "routers-reload.php",
+    data: { router_id: routerId },
+    dataType: 'xml'
+  })
+    .done(function (xml) {
       var routerId = $(xml).find('router_id').text();
       var error = $(xml).find('error').text();
       var message = $(xml).find('message').text();
@@ -91,10 +91,10 @@ function sendRouterUpdateRequest(routerId) {
       }
 
       reloadRouter(routerId);
-		})
-		.fail(function( jqXHR, textStatus ) {
-		   alert( "Add new form request failed: " + textStatus );
-		});
+    })
+    .fail(function (jqXHR, textStatus) {
+      alert("Add new form request failed: " + textStatus);
+    });
 }
 
 function setupRouterEditForm(formData, action) {
@@ -102,22 +102,22 @@ function setupRouterEditForm(formData, action) {
   $("#frmRouterAlert").hide();
   $("#editRouterModal").modal('show');
 
-  $("#btnSubmitRouterForm").click(function() {
+  $("#btnSubmitRouterForm").click(function () {
     $.ajax({
-  		method: "POST",
-  		url: "routers-edit-ajax.php",
-  		data:  $("#frmRouter").serialize(),
-  		dataType: 'xml'
-  	})
-  	.done(function(xml) {
-  		handleRouterEditFormSubmit(xml);
-  	})
-  	.fail(function( jqXHR, textStatus ) {
-  	   alert( "Router request failed: " + textStatus );
-  	});
+      method: "POST",
+      url: "routers-edit-ajax.php",
+      data: $("#frmRouter").serialize(),
+      dataType: 'xml'
+    })
+      .done(function (xml) {
+        handleRouterEditFormSubmit(xml);
+      })
+      .fail(function (jqXHR, textStatus) {
+        alert("Router request failed: " + textStatus);
+      });
   });
 
-  $("#btnCancelRouterForm").click(function() {
+  $("#btnCancelRouterForm").click(function () {
     $("#editRouterModal").modal('hide');
   });
 

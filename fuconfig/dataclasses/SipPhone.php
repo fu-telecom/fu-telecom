@@ -1,14 +1,16 @@
 <?php
 
-class SipPhone extends Phone {
+class SipPhone extends Phone
+{
 
-	public function CreateEmpty() {
-		Parent::CreateEmpty();
+  public function CreateEmpty()
+  {
+    parent::CreateEmpty();
 
-		$this->phone_type_id = PhoneType::SIP;
-	}
+    $this->phone_type_id = PhoneType::SIP;
+  }
 
-	
+
 
 }
 

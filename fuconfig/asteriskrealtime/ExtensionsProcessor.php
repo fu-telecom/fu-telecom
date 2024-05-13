@@ -2,10 +2,12 @@
 
 //This is used to create the extensions file in /asterisk_scripts
 //That file is used for the random call script
-class ExtensionsProcessor {
+class ExtensionsProcessor
+{
   private $result;
 
-  public function ProcessExtensions() {
+  public function ProcessExtensions()
+  {
     $this->result = new Result("ExtensionsProcessor");
     $this->result->Log("<br><h2>Extension Processing</h2>");
 
@@ -25,10 +27,13 @@ class ExtensionsProcessor {
     return $this->result;
   }
 
-  private function IsListedNumber($number):bool {
+  private function IsListedNumber($number): bool
+  {
 
-    if (!($number->number_type_id == NumberType::SIP or
-          $number->number_type_id == NumberType::LINE))
+    if (
+      !($number->number_type_id == NumberType::SIP or
+        $number->number_type_id == NumberType::LINE)
+    )
       return false;
 
     $directory = $number->GetPhoneDirectory();
@@ -42,7 +47,8 @@ class ExtensionsProcessor {
     return true;
   }
 
-  private function WriteExtensionsListFile($extensions) {
+  private function WriteExtensionsListFile($extensions)
+  {
     $fileName = "/asterisk_scripts/extensions-list-web.txt";
     $file = fopen($fileName, "w+");
     $n = 0;
@@ -62,7 +68,8 @@ class ExtensionsProcessor {
     fclose($file);
   }
 
-  private function CombineWebAndCliFiles() {
+  private function CombineWebAndCliFiles()
+  {
     $this->result->Log("<br><b>Combining Extensions Files Into 1</b><br>");
     $this->result->Log(shell_exec('cat /asterisk_scripts/extensions-list-cli.txt > /asterisk_scripts/extensions-list.txt'));
     $this->result->Log(shell_exec('cat /asterisk_scripts/extensions-list-web.txt >> /asterisk_scripts/extensions-list.txt'));
@@ -142,70 +149,70 @@ class ExtensionsProcessor {
       //Take the extension apart to check sccpline_id
       $extensionParts = explode("/", $extension);
 
-  		if ($extension == $number->GetAppNumber()
+      if ($extension == $number->GetAppNumber()
               Or $extensionParts[1] == $number->sccpline_id) {
-  			//It exists. Wipe it.
+        //It exists. Wipe it.
         $extension = null;
-  		}
-  	}
+      }
+    }
   }
 
   private function NumberExists($extensions, $number) {
-  	$exists = false;
+    $exists = false;
 
-  	foreach ($extensions as $extension) {
-  		if ($extension == $number->GetAppNumber()) {
-  			$exists = true;
-  		}
-  	}
-  	//echo "Does Extension Exist?";
-  	//var_dump($exists);
-  	//echo "<br />";
+    foreach ($extensions as $extension) {
+      if ($extension == $number->GetAppNumber()) {
+        $exists = true;
+      }
+    }
+    //echo "Does Extension Exist?";
+    //var_dump($exists);
+    //echo "<br />";
 
-  	return $exists;
+    return $exists;
   }
 
   private function GetExtensionsListFile() {
-  	$fileName = "/asterisk_scripts/extensions-list.txt";
-  	$file = fopen($fileName, "r");
-  	$extenions = array();
+    $fileName = "/asterisk_scripts/extensions-list.txt";
+    $file = fopen($fileName, "r");
+    $extenions = array();
 
-  	$this->result->Log("<b>Reading Extensions File: </b><br/>");
+    $this->result->Log("<b>Reading Extensions File: </b><br/>");
 
-  	while (! feof($file))
-  	{
-  		$line = fgets($file);
-  		$this->result->Log("Line: " . $line . "<br />");
-  		if (strlen($line) > 0) $extensions[] = trim($line);
-  	}
+    while (! feof($file))
+    {
+      $line = fgets($file);
+      $this->result->Log("Line: " . $line . "<br />");
+      if (strlen($line) > 0) $extensions[] = trim($line);
+    }
 
-  	$this->result->Log("<br />");
+    $this->result->Log("<br />");
 
-  	fclose($file);
+    fclose($file);
 
-  	return $extensions;
+    return $extensions;
   }
 
   private function WriteExtensionsListFile($extensions) {
-  	$fileName = "/asterisk_scripts/extensions-list.txt";
-  	$file = fopen($fileName, "w+");
-  	$n = 0;
+    $fileName = "/asterisk_scripts/extensions-list.txt";
+    $file = fopen($fileName, "w+");
+    $n = 0;
 
     $this->result->Log("<b>Writing Extensions File: </b><br/>");
 
-  	while ($n < count($extensions)) {
-  		$newLine = $extensions[$n] . "\n";
-  		//fprintf($file, '%s\r\n', $extensions[$n]);
-  		$this->result->Log("Line: " . $newLine . "<br />");
-  		fwrite($file, $newLine);
-  		$n = $n + 1;
-  	}
+    while ($n < count($extensions)) {
+      $newLine = $extensions[$n] . "\n";
+      //fprintf($file, '%s\r\n', $extensions[$n]);
+      $this->result->Log("Line: " . $newLine . "<br />");
+      fwrite($file, $newLine);
+      $n = $n + 1;
+    }
 
-  	$this->result->Log("<br />");
+    $this->result->Log("<br />");
 
-  	fclose($file);
+    fclose($file);
   }*/
 }
 
 
- ?>
+?>

@@ -1,12 +1,15 @@
 <?php
 
-class ExtensionList extends DataList {
+class ExtensionList extends DataList
+{
 
-  public function Setup() {
+  public function Setup()
+  {
 
   }
 
-  public function LoadByExten($exten) {
+  public function LoadByExten($exten)
+  {
     $query = "SELECT * FROM asteriskrealtime.extensions
               WHERE exten LIKE :exten";
     $parameters = array(":exten" => $exten);
@@ -16,4 +19,4 @@ class ExtensionList extends DataList {
 
 }
 
- ?>
+?>

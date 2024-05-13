@@ -1,6 +1,6 @@
 <?php
 
-include_once('FUConfig.php');
+include_once ('FUConfig.php');
 
 $routerHandler = new RouterHandler();
 
@@ -70,4 +70,4 @@ do {
 
 //echo "Done\n";
 
- ?>
+?>
