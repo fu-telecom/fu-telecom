@@ -1,87 +1,85 @@
 <?php
 
-include_once('FUConfig.php');
+include_once ('FUConfig.php');
 
-$currentRequest = new PageRequest($_REQUEST);
+main();
 
+function main(): void
+{
+  $request = new PageRequest($_REQUEST);
+  $org = loadOrgFromRequest($request);
 
-$org = new Org();
-$org->LoadFromPageRequest($currentRequest);
-var_dump($org);
+  if ($request->IsUpdateRequest()) {
+    handleUpdateRequest($org);
+  } else if ($request->IsCreateRequest()) {
+    handleCreateRequest($org);
+  } else if ($request->IsDeleteRequest()) {
+    handleDeleteRequest($request, $org);
+  } else {
+    handleUnknownRequest();
+  }
 
-if ($currentRequest->IsUpdateRequest() Or $currentRequest->IsCreateRequest()) {
-	$org->SaveToDB();
-} else if ($currentRequest->IsDeleteRequest()) {
-	//First check to make sure there are no phones assigned.
-	$org_id = $currentRequest->GetID();
-
-	$phoneList = new PhoneList();
-	$phoneList->LoadOrgPhones($org_id);
-
-	echo $phoneList->GetCount();
-
-	if ($phoneList->GetCount() == 0) {
-		$org->LoadFromDB($org_id);
-		$org->DeleteFromDB();
-
-
-
-} else {
-	$trace = debug_backtrace();
-	trigger_error(
-		'Cannot delete org with assigned phones: ' .
-		' in ' . $trace[0]['file'] .
-		' on line ' . $trace[0]['line'],
-		E_USER_ERROR);
-	}
-} else {
-	$trace = debug_backtrace();
-	trigger_error(
-		'Invalid request type: ' .
-		' in ' . $trace[0]['file'] .
-		' on line ' . $trace[0]['line'],
-		E_USER_ERROR);
+  Redirect('/index.php');
 }
 
-Redirect('/index.php');
+function handleUpdateRequest(Org $org): void
+{
+  $org->SaveToDB();
+}
 
-/*
-include_once('includes/defaults.php');
-include_once('includes/db.php');
+function handleCreateRequest(Org $org): void
+{
+  $org->SaveToDB();
+}
 
-if (isset($_GET['edit'])) {
+function handleDeleteRequest(PageRequest $request, Org $org): void
+{
+  $org_id = $request->GetID();
+  throwIfOrgHasPhonesAssigned($org_id);
+  throwIfOrgHasRoutersAssigned($org_id);
 
-	$editQuery = "UPDATE orgs SET org_name = :name, org_contactname = :contactname,
-						org_contactphone = :contactphone, org_contactemail = :contactemail
-					WHERE org_id = :id;";
+  $org->LoadFromDB($org_id);
+  $org->DeleteFromDB();
+}
 
-	$editStmt = $pdo->prepare($editQuery);
-	$editStmt->execute(['id' => $_POST['id'], 'name' => $_POST['name'], 'contactname' => $_POST['contactname'],
-		'contactemail' => $_POST['contactemail'], 'contactphone' => $_POST['contactphone']]);
+function handleUnknownRequest(): void
+{
+  throwErrorWithMessage('Invalid request type');
+}
 
-	Redirect('/index.php');
+function throwIfOrgHasPhonesAssigned(string $org_id): void
+{
+  $phoneList = new PhoneList();
+  $phoneList->LoadOrgPhones($org_id);
 
+  if ($phoneList->GetCount() > 0) {
+    throwErrorWithMessage('Cannot delete org with assigned phones');
+  }
+}
+function throwIfOrgHasRoutersAssigned(string $org_id): void
+{
+  $routerList = new RouterList();
+  $routerList->LoadByOrgId($org_id);
 
-} else if (isset($_GET['add'])) {
+  if ($routerList->GetCount() > 0) {
+    throwErrorWithMessage('Cannot delete org with assigned routers');
+  }
+}
 
-	$addQuery = "INSERT INTO orgs (org_name, org_contactname, org_contactemail, org_contactphone)
-					VALUES (:name, :contactname, :contactemail, :contactphone);";
+function loadOrgFromRequest(PageRequest $request): Org
+{
+  $org = new Org();
+  $org->LoadFromPageRequest($request);
+  return $org;
+}
 
-	$addStmt = $pdo->prepare($addQuery);
-	$addStmt->execute(['name' => $_POST['name'], 'contactname' => $_POST['contactname'],
-		'contactemail' => $_POST['contactemail'], 'contactphone' => $_POST['contactphone']]);
-
-	Redirect('/index.php');
-
-} else if (isset($_GET['delete'])) {
-
-	$delQuery = "DELETE FROM orgs WHERE org_id = ?;";
-	$delStmt = $pdo->prepare($delQuery);
-	$delStmt->execute([$_GET['id']]);
-
-}*/
-
-
-
-
-?>
+function throwErrorWithMessage(string $message): void
+{
+  $trace = debug_backtrace();
+  trigger_error(
+    $message . ':' .
+    ' in ' . $trace[0]['file'] .
+    ' on line ' . $trace[0]['line'],
+    E_USER_ERROR
+  );
+}
