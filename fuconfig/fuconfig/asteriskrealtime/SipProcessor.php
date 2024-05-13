@@ -1,17 +1,20 @@
 <?php
 
-class SipProcessor {
+class SipProcessor
+{
   private $processResult = null;
 
   private $result = null; //Current working result.
 
   private $linesAdded = array();
 
-  public function __construct($processResult) {
+  public function __construct($processResult)
+  {
     $this->processResult = $processResult;
   }
 
-  public function ProcessPhone($phone, $actionToTake, &$result) {
+  public function ProcessPhone($phone, $actionToTake, &$result)
+  {
     $this->result = $result;
     $this->linesAdded = array(); //Wipe array.
 
@@ -36,13 +39,14 @@ class SipProcessor {
     return $this->result;
   }
 
-  private function AddPhone($phone) {
+  private function AddPhone($phone)
+  {
     $this->result->Log("Adding Phone: " . $phone->phone_serial . "<br>");
 
     $assignmentList = new PhoneNumberAssignmentList();
     $assignmentList->LoadByPhoneId($phone->phone_id);
 
-    foreach($assignmentList->GetList() as $assignment) {
+    foreach ($assignmentList->GetList() as $assignment) {
       if ($assignment->todelete_assignment == 1)
         continue; //getting deleted, skip it.
 
@@ -54,9 +58,10 @@ class SipProcessor {
     $this->ClearPhoneFlags($phone);
   }
 
-  private function AddToAsterisk($phone, $number) {
+  private function AddToAsterisk($phone, $number)
+  {
     $this->result->Log("Adding number to asterisk: " . $number->number .
-                          " - " . $number->callerid . "<br>");
+      " - " . $number->callerid . "<br>");
 
     if ($number->todelete_number == 1) {
       $this->result->Log("Skipping this number -- it's marked for deletion.<br>");
@@ -64,11 +69,11 @@ class SipProcessor {
     }
 
     if ($number->sip_user == null) {
-        $this->result->Log("Username or password not set! Can't add.<br>");
-        $exception = new ProcessorException();
-        $exception->MissingSipUserAndPass();
-        throw $exception;
-        return null;
+      $this->result->Log("Username or password not set! Can't add.<br>");
+      $exception = new ProcessorException();
+      $exception->MissingSipUserAndPass();
+      throw $exception;
+      return null;
     }
 
     $sipPeer = new SipPeer();
@@ -88,13 +93,14 @@ class SipProcessor {
     $this->AddToVoicemail($phone, $number);
   }
 
-  public function DeletePhone($phone) {
+  public function DeletePhone($phone)
+  {
     $this->result->Log("Deleting Phone: " . $phone->phone_serial . "<br>");
 
     $assignmentList = new PhoneNumberAssignmentList();
     $assignmentList->LoadByPhoneId($phone->phone_id);
 
-    foreach($assignmentList->GetList() as $assignment) {
+    foreach ($assignmentList->GetList() as $assignment) {
       $number = $assignment->GetNumber();
       $this->DeleteFromAsterisk($number);
 
@@ -102,7 +108,8 @@ class SipProcessor {
     }
   }
 
-  public function RemoveFromSippeersByName($phone) {
+  public function RemoveFromSippeersByName($phone)
+  {
     $this->result->Log("Removing SIP phone by name." . $phone->phone_serial . "<br>");
 
     $numberList = new NumberList();
@@ -119,9 +126,10 @@ class SipProcessor {
     }
   }
 
-  private function DeleteFromAsterisk($number) {
+  private function DeleteFromAsterisk($number)
+  {
     $this->result->Log("Deleting data from asterisk for number: " . $number->number .
-                          " - " . $number->callerid . ". Sippeer id: ". $number->sippeer_id . "<br>");
+      " - " . $number->callerid . ". Sippeer id: " . $number->sippeer_id . "<br>");
 
     $sippeer_id = $number->sippeer_id;
 
@@ -144,7 +152,8 @@ class SipProcessor {
   // TODO: Put this all in the PhoneProcessor.
   //---------------------------------------------------
 
-  private function AddToExtensions($number) {
+  private function AddToExtensions($number)
+  {
     $dialExtension = new Extension();
     $vmExtension = new Extension();
     //Asterisk doesn't support realtime hints.
@@ -166,7 +175,8 @@ class SipProcessor {
     $vmExtension->SaveToDB();
   }
 
-  private function AddToVoicemail($phone, $number) {
+  private function AddToVoicemail($phone, $number)
+  {
     $this->result->Log("AddToVoicemail() for " . $number->number . "<br>");
     $vm = new Voicemail();
     $vm->mailbox = $number->number;
@@ -175,7 +185,8 @@ class SipProcessor {
     $vm->SaveToDB();
   }
 
-  private function ClearPhoneFlags($phone) {
+  private function ClearPhoneFlags($phone)
+  {
     $phone->altered = 0;
     $phone->added = 0;
     $phone->errored = 0;
@@ -183,7 +194,8 @@ class SipProcessor {
     $phone->SaveToDB();
   }
 
-  private function ClearNumberFlagsForLinesAdded() {
+  private function ClearNumberFlagsForLinesAdded()
+  {
     foreach ($this->linesAdded as $number) {
       $number->added_number = 0;
       $number->altered_number = 0;
@@ -195,4 +207,4 @@ class SipProcessor {
 
 
 
- ?>
+?>

@@ -1,9 +1,11 @@
 <?php
 
-class HintsProcessor {
+class HintsProcessor
+{
   private $result;
 
-  public function ProcessHints() {
+  public function ProcessHints()
+  {
     $this->result = new Result("HintsProcessor");
     $this->result->Log("<br><h2>Hints Processing</h2>");
 
@@ -13,20 +15,24 @@ class HintsProcessor {
     return $this->result;
   }
 
-  private function ReloadDialplan() {
+  private function ReloadDialplan()
+  {
     $reloadCmd = 'sudo asterisk -x "dialplan reload"';
     $this->result->Log("<h3>Reloading Dialplan<h3><br>");
     $this->result->Log(shell_exec($reloadCmd));
   }
 
-  private function ProcessHintsFile() {
+  private function ProcessHintsFile()
+  {
     $numberList = new NumberList();
     $numberList->LoadAll();
     $hints = array();
 
     foreach ($numberList->GetList() as $number) {
-      if (!($number->number_type_id == NumberType::SIP or
-            $number->number_type_id == NumberType::LINE))
+      if (
+        !($number->number_type_id == NumberType::SIP or
+          $number->number_type_id == NumberType::LINE)
+      )
         continue;
 
 
@@ -36,14 +42,15 @@ class HintsProcessor {
         $hintText = "exten => " . $number->number . ",hint," . $number->GetAppNumber();
       }
 
-        $hints[] = $hintText;
+      $hints[] = $hintText;
     }
 
     $this->WriteHintsFile($hints);
   }
 
 
-  private function WriteHintsFile($hints) {
+  private function WriteHintsFile($hints)
+  {
     $fileName = "/asterisk_scripts/gui-hints-list.txt";
     $file = fopen($fileName, "w+");
     $n = 0;
@@ -65,4 +72,4 @@ class HintsProcessor {
 
 }
 
- ?>
+?>

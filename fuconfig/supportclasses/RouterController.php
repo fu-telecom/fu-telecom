@@ -1,10 +1,12 @@
 <?php
 
-class RouterController extends Controller {
+class RouterController extends Controller
+{
 
   private $pageRequest = null;
 
-  public function ProcessRequest($pageRequest) {
+  public function ProcessRequest($pageRequest)
+  {
     $this->pageRequest = $pageRequest;
 
     $this->error = "";
@@ -20,7 +22,8 @@ class RouterController extends Controller {
   }
 
   //TODO: Cleanup code duplication.
-  private function ProcessUpdateRequest($pageRequest) {
+  private function ProcessUpdateRequest($pageRequest)
+  {
     if ($pageRequest->request == "deployed") {
       //Switch the deployed flags.
       $this->UpdateDeployed($pageRequest->GetID());
@@ -46,7 +49,8 @@ class RouterController extends Controller {
     }
   }
 
-  private function ProcessCreateRequest() {
+  private function ProcessCreateRequest()
+  {
     $router = new Router();
 
     $this->request = "create";
@@ -54,7 +58,8 @@ class RouterController extends Controller {
     $this->UpdateRouter($router);
   }
 
-  private function UpdateDeployed($router_id) {
+  private function UpdateDeployed($router_id)
+  {
     $router = new Router();
     $router->LoadFromDB($router_id);
 
@@ -65,7 +70,8 @@ class RouterController extends Controller {
     $this->router_is_deployed = $router->router_is_deployed;
   }
 
-  private function UpdateRouter(&$router) {
+  private function UpdateRouter(&$router)
+  {
     $router->channel_24 = $this->pageRequest->channel_24;
     $router->channel_5 = $this->pageRequest->channel_5;
     $router->number = $this->pageRequest->number;
@@ -79,4 +85,4 @@ class RouterController extends Controller {
 }
 
 
- ?>
+?>

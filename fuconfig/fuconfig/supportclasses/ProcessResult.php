@@ -1,6 +1,7 @@
 <?php
 
-class ProcessResult {
+class ProcessResult
+{
   public static $DUMP_LOG_TO_CONSOLE = false;
 
   private $resultList = array();
@@ -11,44 +12,51 @@ class ProcessResult {
   private $logText = "";
   private $time = null;
 
-  public function __construct($dumpToLog = false) {
+  public function __construct($dumpToLog = false)
+  {
     self::$DUMP_LOG_TO_CONSOLE = $dumpToLog;
 
     $this->time = date('Y-m-d_hia');
   }
 
-  public function GetXmlResult() {
+  public function GetXmlResult()
+  {
     if ($this->xmlResult == null)
       $this->ProcessAsXml();
 
     return $this->xmlResult;
   }
 
-  public function GetTextResult() {
+  public function GetTextResult()
+  {
     if ($this->textResult == null)
       $this->ProcessAsText();
 
     return $this->textResult;
   }
 
-  public function GetLog() {
+  public function GetLog()
+  {
     return $this->logText;
   }
 
-  public function LogText($text) {
+  public function LogText($text)
+  {
     if (ProcessResult::$DUMP_LOG_TO_CONSOLE)
       echo $text;
 
     $this->logText .= $text;
   }
 
-  public function AddResult($result) {
+  public function AddResult($result)
+  {
     $this->resultList[] = $result;
 
     $this->logText .= "<br>" . $result->ToHtmlText();
   }
 
-  public function ProcessAsXML() {
+  public function ProcessAsXML()
+  {
     $xml = new SimpleXMLElement('<xml/>');
     $fullLog = $xml->addChild("FullLog", $this->logText);
     $timeStamp = $xml->addChild("TimeStamp", $this->time);
@@ -62,7 +70,8 @@ class ProcessResult {
     return $xml;
   }
 
-  public function ProcessAsText() {
+  public function ProcessAsText()
+  {
     $resultText = "<h2>Process Result</h2><br><br>";
     $resultText .= "<h3>Full Log</h3><p>" . $this->logText . "</p><br><br>";
 
@@ -77,11 +86,12 @@ class ProcessResult {
 
 
 
-  public function AsXML($includeLog) {
+  public function AsXML($includeLog)
+  {
 
   }
 }
 
 
 
- ?>
+?>

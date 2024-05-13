@@ -1,83 +1,92 @@
 <?php
 
-class PhoneNumberAssignmentList extends DataList {
+class PhoneNumberAssignmentList extends DataList
+{
 
-	public function Setup() {
+  public function Setup()
+  {
 
-	}
+  }
 
-	//--------------------------------------
-	// List Search Functions
-	//--------------------------------------
+  //--------------------------------------
+  // List Search Functions
+  //--------------------------------------
 
-	public function GetByPhoneAndNumber($phone_id, $number_id) {
-		foreach ($this->GetList() As &$assignment) {
-			if ($assignment->phone_id == $phone_id And $assignment->number_id == $number_id)
-				return $assignment;
-		}
+  public function GetByPhoneAndNumber($phone_id, $number_id)
+  {
+    foreach ($this->GetList() as &$assignment) {
+      if ($assignment->phone_id == $phone_id and $assignment->number_id == $number_id)
+        return $assignment;
+    }
 
-		return null;
-	}
+    return null;
+  }
 
-	//---------------------------------------
-	// DB Load Functions
-	//---------------------------------------
+  //---------------------------------------
+  // DB Load Functions
+  //---------------------------------------
 
-	public function LoadAll() {
-		$query = "SELECT * FROM fuconfig.phone_number_assignment";
+  public function LoadAll()
+  {
+    $query = "SELECT * FROM fuconfig.phone_number_assignment";
 
-		return $this->LoadListFromQuery($query, "PhoneNumberAssignment");
-	}
+    return $this->LoadListFromQuery($query, "PhoneNumberAssignment");
+  }
 
 
 
-	public function LoadByNumberId($number_id) {
-		$query = "SELECT * FROM fuconfig.phone_number_assignment
+  public function LoadByNumberId($number_id)
+  {
+    $query = "SELECT * FROM fuconfig.phone_number_assignment
 					WHERE number_id = :number_id
 					ORDER BY display_order;";
-		$parameters = array(":number_id" => $number_id);
-		$classname = "PhoneNumberAssignment";
+    $parameters = array(":number_id" => $number_id);
+    $classname = "PhoneNumberAssignment";
 
-		$this->dataList = $this->LoadListFromQueryParameters($query, $classname, $parameters);
-	}
+    $this->dataList = $this->LoadListFromQueryParameters($query, $classname, $parameters);
+  }
 
-	public function LoadByPhoneId($phone_id) {
-		$query = "SELECT * FROM fuconfig.phone_number_assignment
+  public function LoadByPhoneId($phone_id)
+  {
+    $query = "SELECT * FROM fuconfig.phone_number_assignment
 					WHERE phone_id = :phone_id
 					ORDER BY display_order;";
-		$parameters = array(":phone_id" => $phone_id);
-		$classname = "PhoneNumberAssignment";
+    $parameters = array(":phone_id" => $phone_id);
+    $classname = "PhoneNumberAssignment";
 
-		$this->dataList = $this->LoadListFromQueryParameters($query, $classname, $parameters);
-	}
+    $this->dataList = $this->LoadListFromQueryParameters($query, $classname, $parameters);
+  }
 
-	public function LoadMarkedForDeletion() {
-		$query = "SELECT * FROM fuconfig.phone_number_assignment
+  public function LoadMarkedForDeletion()
+  {
+    $query = "SELECT * FROM fuconfig.phone_number_assignment
 							WHERE todelete_assignment = 1";
 
-		$this->LoadListFromQuery($query, "PhoneNumberAssignment");
-	}
+    $this->LoadListFromQuery($query, "PhoneNumberAssignment");
+  }
 
-	public function LoadNotMarkedForDeletion() {
-		$query = "SELECT * FROM fuconfig.phone_number_assignment
+  public function LoadNotMarkedForDeletion()
+  {
+    $query = "SELECT * FROM fuconfig.phone_number_assignment
 							WHERE todelete_assignment = 0";
 
-		$this->LoadListFromQuery($query, "PhoneNumberAssignment");
-	}
+    $this->LoadListFromQuery($query, "PhoneNumberAssignment");
+  }
 
-	public function LoadNotMarkedForDeletionByNumber($number_id) {
-		$query = "SELECT * FROM fuconfig.phone_number_assignment
+  public function LoadNotMarkedForDeletionByNumber($number_id)
+  {
+    $query = "SELECT * FROM fuconfig.phone_number_assignment
 							WHERE todelete_assignment = 0 AND number_id = :number_id";
-		$parameters = array(":number_id" => $number_id);
+    $parameters = array(":number_id" => $number_id);
 
-		$this->LoadListFromQueryParameters($query, "PhoneNumberAssignment", $parameters);
-	}
+    $this->LoadListFromQueryParameters($query, "PhoneNumberAssignment", $parameters);
+  }
 
 
 
-	//public function GetByNumberId($number_id) {
-	//
-	//}
+  //public function GetByNumberId($number_id) {
+  //
+  //}
 }
 
 

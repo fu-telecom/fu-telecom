@@ -1,6 +1,7 @@
 <?php
 
-class RouterHandler extends Controller {
+class RouterHandler extends Controller
+{
   private const CURRENT_VERSION = 10;
   private const REMOTE_SCRIPT = "/root/dlink_install_web.sh";
   private const LOCAL_SCRIPT = "/tftproot/openwrt/dlink_install_5-2019.sh";
@@ -11,11 +12,13 @@ class RouterHandler extends Controller {
   private $ssh = null;
   private $router = null;
 
-  public function __construct() {
+  public function __construct()
+  {
     $this->ssh = new SSH();
   }
 
-  public function CheckAndUpdateRouter($router) {
+  public function CheckAndUpdateRouter($router)
+  {
     $this->router = $router;
 
     //Set flags for return data to defaults.
@@ -32,8 +35,11 @@ class RouterHandler extends Controller {
 
     try {
       //Make connection.
-      $connected = $this->ssh->Connect($this->router->GetIP(),
-          self::ROUTER_USER, self::ROUTER_PASS);
+      $connected = $this->ssh->Connect(
+        $this->router->GetIP(),
+        self::ROUTER_USER,
+        self::ROUTER_PASS
+      );
 
       if (!$connected) {
         $this->error = 1;
@@ -55,7 +61,8 @@ class RouterHandler extends Controller {
     }
   }
 
-  private function Update() {
+  private function Update()
+  {
     //echo "Connecting to: " . $this->router->GetIP() . "<br>";
 
     if ($this->ScriptUpdateRequired()) {
@@ -74,7 +81,8 @@ class RouterHandler extends Controller {
     }
   }
 
-  private function ChannelUpdateRequired(): bool {
+  private function ChannelUpdateRequired(): bool
+  {
     $this->GetCurrentChannelSettings();
 
     if ($this->router->channel_24 != $this->router->channel_24_current)
@@ -86,7 +94,8 @@ class RouterHandler extends Controller {
     return false;
   }
 
-  private function GetCurrentChannelSettings() {
+  private function GetCurrentChannelSettings()
+  {
     $this->ssh->Execute('uci show wireless.radio0.channel');
     $uci24 = $this->ssh->GetOutput();
 
@@ -105,7 +114,8 @@ class RouterHandler extends Controller {
     $this->router->SaveToDB();
   }
 
-  private function GetChannelFromUci($uci) {
+  private function GetChannelFromUci($uci)
+  {
     //wireless.radio0.channel=11
     $result = explode("=", $uci);
     return (int) $result[1];
@@ -115,7 +125,8 @@ class RouterHandler extends Controller {
   // Script / Version functions
   //-----------------------------------------
 
-  private function ExecuteInstallFile() {
+  private function ExecuteInstallFile()
+  {
     $cmd = self::REMOTE_SCRIPT . " " . $this->router->number . " 1 0 " .
       $this->router->channel_24 . " " . $this->router->channel_5;
 
@@ -127,7 +138,8 @@ class RouterHandler extends Controller {
     //echo $this->ssh->GetOutput();
   }
 
-  private function ScriptUpdateRequired(): bool {
+  private function ScriptUpdateRequired(): bool
+  {
     $version = $this->GetVersion();
 
     if (strlen($version) == 0 or $version < self::CURRENT_VERSION)
@@ -136,14 +148,16 @@ class RouterHandler extends Controller {
     return false;
   }
 
-  private function SendDlinkInstallFile() {
+  private function SendDlinkInstallFile()
+  {
     $createMode = 0775;
     //echo "Sending Dlink install File<br>";
 
     $this->ssh->SendFile(self::LOCAL_SCRIPT, self::REMOTE_SCRIPT, $createMode);
   }
 
-  private function GetVersion() {
+  private function GetVersion()
+  {
     $this->ssh->Execute('touch /etc/FUVersion');
     $this->ssh->Execute('cat /etc/FUVersion');
 
@@ -155,10 +169,11 @@ class RouterHandler extends Controller {
     return $version;
   }
 
-  private function SetVersion($version) {
+  private function SetVersion($version)
+  {
     $this->ssh->Execute('echo ' . $version . " > /etc/FUVersion");
   }
 }
 
 
- ?>
+?>

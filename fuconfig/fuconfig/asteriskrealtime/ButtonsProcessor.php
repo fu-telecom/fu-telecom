@@ -3,10 +3,12 @@
 //TODO: Remove this, if the switch to web config worked.
 //      It will be obsolete since we've moved to the
 //      web config only. This was solely for use with hardcoded/scripted phones.
-class ButtonsProcessor {
+class ButtonsProcessor
+{
   private $result;
 
-  public function ProcessButtons() {
+  public function ProcessButtons()
+  {
     $this->result = new Result("ButtonsProcessor");
     $this->result->Log("<br><h2>Buttons Processing</h2>");
 
@@ -16,7 +18,7 @@ class ButtonsProcessor {
 
     foreach ($numberList->GetList() as $number) {
       $buttonText = "button - speeddial, " . $number->callerid . ", " .
-                $number->number . ", " . $number->number . "@hints";
+        $number->number . ", " . $number->number . "@hints";
 
       $buttons[] = $buttonText;
     }
@@ -30,7 +32,8 @@ class ButtonsProcessor {
   }
 
 
-  private function WriteButtonsFile($buttons) {
+  private function WriteButtonsFile($buttons)
+  {
     $fileName = "/asterisk_scripts/buttons_list/buttons-list-web.txt";
     $file = fopen($fileName, "w+");
     $n = 0;
@@ -50,14 +53,16 @@ class ButtonsProcessor {
     fclose($file);
   }
 
-  private function CombineWebAndCliFiles() {
+  private function CombineWebAndCliFiles()
+  {
     $this->result->Log("<br><b>Combining Buttons Files Into 1</b><br>");
     $this->result->Log(shell_exec('cat /asterisk_scripts/buttons_list/buttons-list-hardcoded.txt > /asterisk_scripts/buttons_list/buttons-list.txt'));
     $this->result->Log(shell_exec('cat /asterisk_scripts/buttons_list/buttons-list-cli.txt >> /asterisk_scripts/buttons_list/buttons-list.txt'));
     $this->result->Log(shell_exec('cat /asterisk_scripts/buttons_list/buttons-list-web.txt >> /asterisk_scripts/buttons_list/buttons-list.txt'));
   }
 
-  private function GeneratePhoneButtonLists() {
+  private function GeneratePhoneButtonLists()
+  {
     $this->result->Log("<br><b>Generating 7960/7965 lists</b><br>");
     $this->result->Log(shell_exec('/asterisk_scripts/buttons_list/buttons-list-7960.sh'));
     $this->result->Log(shell_exec('/asterisk_scripts/buttons_list/buttons-list-7965.sh'));
@@ -65,4 +70,4 @@ class ButtonsProcessor {
 
 }
 
- ?>
+?>

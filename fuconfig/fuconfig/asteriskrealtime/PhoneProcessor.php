@@ -1,7 +1,8 @@
 <?php
 //TODO: Voicemail!!!
 
-class PhoneProcessor extends Controller {
+class PhoneProcessor extends Controller
+{
   private $sccpProcessor;
   private $sipProcessor;
 
@@ -13,18 +14,21 @@ class PhoneProcessor extends Controller {
   public const ADD_PHONE = 2;
   public const DELETE_PHONE = 4;
 
-  public function __construct(&$resultProcessor) {
+  public function __construct(&$resultProcessor)
+  {
     $this->resultProcessor = $resultProcessor;
 
     $this->sccpProcessor = new SccpProcessor($this->resultProcessor);
     $this->sipProcessor = new SipProcessor($this->resultProcessor);
   }
 
-  private function Log($text) {
+  private function Log($text)
+  {
     $this->resultProcessor->LogText($text);
   }
 
-  public function ProcessAllPhones() {
+  public function ProcessAllPhones()
+  {
     $this->overallResult = new Result("PhoneProcessorResult");
 
     $this->Log("<h2>Processing All Phones to Asterisk</h2><br>");
@@ -55,7 +59,8 @@ class PhoneProcessor extends Controller {
   // Processing functions
   //-----------------------------------------
 
-  private function ProcessPhoneList($modifiedPhoneList) {
+  private function ProcessPhoneList($modifiedPhoneList)
+  {
     $this->Log("<b>Processing the phone list.</b><br>");
     foreach ($modifiedPhoneList->GetList() as $phone) {
       $this->Log("ProcessPhoneList: " . $phone->phone_serial . "<br>");
@@ -98,7 +103,8 @@ class PhoneProcessor extends Controller {
   }
 
   //This will delete from the asterisk realtime db.
-  private function ProcessPhone($phone, &$result) {
+  private function ProcessPhone($phone, &$result)
+  {
     //Logging for error reporting / result reporting.
     $result->Log("ProcessPhone(): " . $phone->phone_serial . "<br>");
     $result->phone_id = $phone->phone_id;
@@ -122,7 +128,8 @@ class PhoneProcessor extends Controller {
   }
 
   //For errors, unwind db adds.
-  private function UnwindProcess($phone, &$result) {
+  private function UnwindProcess($phone, &$result)
+  {
     if ($phone->phone_type_id == PhoneType::SCCP) {
       $result->Log("Unwind deleting SCCP Phone<br>");
       $this->sccpProcessor->DeletePhoneAsterisk($phone);
@@ -137,7 +144,8 @@ class PhoneProcessor extends Controller {
     }
   }
 
-  private function GetActionToTake($phone, &$result) {
+  private function GetActionToTake($phone, &$result)
+  {
     $action = 0;
 
     if ($phone->todelete_phone == 1) {
@@ -152,7 +160,7 @@ class PhoneProcessor extends Controller {
       $result->Log("Phone requires action: ADD<br>");
       $result->action = "add";
       $this->overallResult->addedCount += 1;
-    } else if ($phone->altered == 1 And $phone->todelete_phone == 0 And $phone->added == 0) {
+    } else if ($phone->altered == 1 and $phone->todelete_phone == 0 and $phone->added == 0) {
       $action = self::EDIT_PHONE;
 
       $result->Log("Phone requires action: EDIT<br>");
@@ -174,23 +182,25 @@ class PhoneProcessor extends Controller {
   // Cleanup functions
   //-------------------------------------
 
-  private function CleanupDeletedItems() {
-      $this->Log("<br>Cleaning up deleted items.<br>");
-      $this->CleanupAssignments();
-      //$this->CleanupNumbers();
-      $this->CleanupPhones();
+  private function CleanupDeletedItems()
+  {
+    $this->Log("<br>Cleaning up deleted items.<br>");
+    $this->CleanupAssignments();
+    //$this->CleanupNumbers();
+    $this->CleanupPhones();
   }
 
-  private function CleanupAssignments() {
+  private function CleanupAssignments()
+  {
     $this->Log("Cleaning up deleted assignments.<br>");
     $deletionList = new PhoneNumberAssignmentList();
     $deletionList->LoadMarkedForDeletion();
 
     $this->overallResult->deletedAssignments = $deletionList->GetCount();
 
-    foreach($deletionList->GetList() as $assignment) {
+    foreach ($deletionList->GetList() as $assignment) {
       $this->Log("Deleting (phone/number): " . $assignment->phone_id .
-                    "/" . $assignment->number_id);
+        "/" . $assignment->number_id);
 
       $assignment->DeleteFromDB();
     }
@@ -208,7 +218,8 @@ class PhoneProcessor extends Controller {
   }*/
 
   //Warning: This will delete phones without checking phone_is_deployed
-  private function CleanupPhones() {
+  private function CleanupPhones()
+  {
     $this->Log("Cleaning up deleted phones.<br>");
 
     $phoneList = new PhoneList();
@@ -224,7 +235,8 @@ class PhoneProcessor extends Controller {
   }
 
   //Removes any numbers that are no longer assigned.
-  private function RemoveUnassignedNumbers() {
+  private function RemoveUnassignedNumbers()
+  {
     $this->Log("Removing unassigned numbers.");
 
     $unassignedList = new NumberList();
@@ -246,7 +258,8 @@ class PhoneProcessor extends Controller {
   //  probably not going to be used, etc.
   //----------------------------------------
 
-  public function ResetAllAsteriskData() {
+  public function ResetAllAsteriskData()
+  {
 
     //Start from clean slate in SCCP related tables.
     $sccplineqry = "DELETE FROM asteriskrealtime.sccpline";
@@ -286,4 +299,4 @@ class PhoneProcessor extends Controller {
 
 
 
- ?>
+?>

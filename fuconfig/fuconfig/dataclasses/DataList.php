@@ -1,102 +1,110 @@
 <?php
 
-abstract class DataList {
-	protected $loaded = false;
+abstract class DataList
+{
+  protected $loaded = false;
 
-	protected $dataList = array();
+  protected $dataList = array();
 
-	public function __construct() {
-		$this->Setup();
-	}
+  public function __construct()
+  {
+    $this->Setup();
+  }
 
-	abstract public function Setup();
+  abstract public function Setup();
 
-	public function GetList() {
-		return $this->dataList;
-	}
+  public function GetList()
+  {
+    return $this->dataList;
+  }
 
-	public function GetCount() {
-		if ($this->dataList == null)
-			return 0;
+  public function GetCount()
+  {
+    if ($this->dataList == null)
+      return 0;
 
-		if (!isset($this->dataList))
-			return 0;
+    if (!isset($this->dataList))
+      return 0;
 
-		return count($this->dataList);
-	}
+    return count($this->dataList);
+  }
 
-	public function IsLoaded(): bool {
-		return $loaded;
-	}
+  public function IsLoaded(): bool
+  {
+    return $loaded;
+  }
 
-	//-----------------------------------------------
-	// Load Functions
-	//-----------------------------------------------
+  //-----------------------------------------------
+  // Load Functions
+  //-----------------------------------------------
 
-	protected function LoadListFromQuery($query, $classname) {
-		$data = FUConfig::ExecuteQuery($query);
-		$dataList = array();
+  protected function LoadListFromQuery($query, $classname)
+  {
+    $data = FUConfig::ExecuteQuery($query);
+    $dataList = array();
 
-		while ($dataRow = $data->fetch()) {
-			//echo "Create New Object of type " . $classname . "<br />";
-			$newObj = new $classname;
+    while ($dataRow = $data->fetch()) {
+      //echo "Create New Object of type " . $classname . "<br />";
+      $newObj = new $classname;
 
-			//echo "LoadFromDataRow(): <br />";
-			//var_dump($dataRow);
-			//echo "<br /><br />";
-			$newObj->LoadFromDataRow($dataRow);
+      //echo "LoadFromDataRow(): <br />";
+      //var_dump($dataRow);
+      //echo "<br /><br />";
+      $newObj->LoadFromDataRow($dataRow);
 
-			//echo "Adding to Target List<br /><br /><br />";
-			$dataList[] = $newObj;
-		}
+      //echo "Adding to Target List<br /><br /><br />";
+      $dataList[] = $newObj;
+    }
 
-		$this->loaded = true;
+    $this->loaded = true;
 
-		$this->dataList = $dataList;
+    $this->dataList = $dataList;
 
-		return $this->dataList;
-	}
+    return $this->dataList;
+  }
 
-	//Overloaded version does parameter based query for sql injection safety.
-	protected function LoadListFromQueryParameters($query, $classname, $parameters) {
-		$count = 0;
-		$dataList = array();
+  //Overloaded version does parameter based query for sql injection safety.
+  protected function LoadListFromQueryParameters($query, $classname, $parameters)
+  {
+    $count = 0;
+    $dataList = array();
 
-		$data = FUConfig::ExecuteParameterQuery($query, $parameters);
+    $data = FUConfig::ExecuteParameterQuery($query, $parameters);
 
-		while ($dataRow = $data->fetch()) {
-			//echo "Create New Object of type " . $classname . "<br />";
-			$newObj = new $classname;
+    while ($dataRow = $data->fetch()) {
+      //echo "Create New Object of type " . $classname . "<br />";
+      $newObj = new $classname;
 
-			//echo "LoadFromDataRow(): <br />";
-			//var_dump($dataRow);
-			//echo "<br /><br />";
-			$newObj->LoadFromDataRow($dataRow);
+      //echo "LoadFromDataRow(): <br />";
+      //var_dump($dataRow);
+      //echo "<br /><br />";
+      $newObj->LoadFromDataRow($dataRow);
 
-			//echo "Adding to Target List<br /><br /><br />";
-			$dataList[] = $newObj;
-			$count += 1;
-		}
+      //echo "Adding to Target List<br /><br /><br />";
+      $dataList[] = $newObj;
+      $count += 1;
+    }
 
-		if ($count > 0) {
-			$this->loaded = true;
-			$this->dataList = $dataList;
-		} else {
-			return null;
-		}
+    if ($count > 0) {
+      $this->loaded = true;
+      $this->dataList = $dataList;
+    } else {
+      return null;
+    }
 
-		return $this->dataList;
-	}
+    return $this->dataList;
+  }
 
-	//---------------------------------------
-	// Iterative Operations
-	//---------------------------------------
+  //---------------------------------------
+  // Iterative Operations
+  //---------------------------------------
 
-	public function DeleteAllFromDB() {
-		foreach ($this->dataList as $item) {
-			$item->DeleteFromDB();
-		}
-	}
+  public function DeleteAllFromDB()
+  {
+    foreach ($this->dataList as $item) {
+      $item->DeleteFromDB();
+    }
+  }
 
 
 }

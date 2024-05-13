@@ -3,23 +3,23 @@
 
 function Redirect($url, $permanent = false)
 {
-    if (headers_sent() === false)
-    {
-        header('Location: ' . $url, true, ($permanent === true) ? 301 : 302);
-    }
+  if (headers_sent() === false) {
+    header('Location: ' . $url, true, ($permanent === true) ? 301 : 302);
+  }
 
-    exit();
+  exit();
 }
 
 function OutputXML($xml)
 {
-	//Output data produced.
-	ob_clean();
-	Header('Content-Type: text/xml');
-	print($xml->asXML());
+  //Output data produced.
+  ob_clean();
+  Header('Content-Type: text/xml');
+  print ($xml->asXML());
 }
 
-function GetXMLItemValue($xml, $xpath) {
+function GetXMLItemValue($xml, $xpath)
+{
   $xpathResult = $xml->xpath($xpath);
 
   if (count($xpathResult) < 1) {
