@@ -1,6 +1,7 @@
 <?php
 
-class SSH {
+class SSH
+{
   private $stdout;
   private $stderr;
 
@@ -13,26 +14,29 @@ class SSH {
 
   private $connectionMade = false;
 
-  public function __construct($useErrorStream = false) {
+  public function __construct($useErrorStream = false)
+  {
     $this->useErrorStream = $useErrorStream;
 
-    set_error_handler(function($errno, $errstr, $errfile, $errline, $errcontext) {
-    // error was suppressed with the @-operator
-    if (0 === error_reporting()) {
+    set_error_handler(function ($errno, $errstr, $errfile, $errline, $errcontext) {
+      // error was suppressed with the @-operator
+      if (0 === error_reporting()) {
         return false;
-    }
+      }
 
-    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
-});
+      throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+    });
 
   }
 
-  public function __destruct() {
+  public function __destruct()
+  {
     if ($this->connectionMade)
       ssh2_exec($this->connection, 'exit');
   }
 
-  public function Connect($hostname, $user, $pass) {
+  public function Connect($hostname, $user, $pass)
+  {
     $this->connection = ssh2_connect($hostname);
     ssh2_auth_password($this->connection, $user, $pass);
 
@@ -45,7 +49,8 @@ class SSH {
     return true;
   }
 
-  public function Execute($command) {
+  public function Execute($command)
+  {
     if ($this->connectionMade == false)
       throw new Exception("Use Connect() before trying to send commands.");
 
@@ -61,7 +66,8 @@ class SSH {
 
   }
 
-  public function GetOutput() {
+  public function GetOutput()
+  {
     $output = "";
     /*
     while ($line = fgets($this->stdout)) {
@@ -76,21 +82,25 @@ class SSH {
     return $output;
   }
 
-  public function GetOutputStream() {
+  public function GetOutputStream()
+  {
     return $this->stdout;
   }
 
-  public function GetErrorOutput() {
+  public function GetErrorOutput()
+  {
     $output = stream_get_contents($this->stderr);
 
     return $output;
   }
 
-  public function SendFile($localFile, $destinationFile, $create_mode = 0644) {
+  public function SendFile($localFile, $destinationFile, $create_mode = 0644)
+  {
     ssh2_scp_send($this->connection, $localFile, $destinationFile, $create_mode);
   }
 
-  public function GetLongOutput() {
+  public function GetLongOutput()
+  {
     $out_buf = "";
     $done = 0;
     $t0 = time();
@@ -113,4 +123,4 @@ class SSH {
 
 }
 
- ?>
+?>

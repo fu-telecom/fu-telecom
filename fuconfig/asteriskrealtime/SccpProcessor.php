@@ -1,14 +1,16 @@
 <?php
 
 //Asterisk Realtime Controller
-class SccpProcessor {
+class SccpProcessor
+{
   private $processResult = null;
 
   private $result = null; //Current working result.
 
   private $linesAdded = array();
 
-  public function __construct($processResult = null, $result = null) {
+  public function __construct($processResult = null, $result = null)
+  {
     //TODO: Make the process result sections optional somehow.
     if ($processResult == null) {
       $this->processResult = new ProcessResult();
@@ -18,7 +20,8 @@ class SccpProcessor {
 
   }
 
-  public function ProcessPhone($phone, $actionToTake, &$result) {
+  public function ProcessPhone($phone, $actionToTake, &$result)
+  {
     $this->result = $result;
     $this->linesAdded = array(); //Wipe array.
 
@@ -42,7 +45,8 @@ class SccpProcessor {
 
   }
 
-  public function RemoveUnusedLines() {
+  public function RemoveUnusedLines()
+  {
     $unusedLineList = new SccpLineList();
     $unusedLineList->LoadUnassignedLines();
 
@@ -51,10 +55,11 @@ class SccpProcessor {
     }
   }
 
-  public function ReloadPhone($phone) {
+  public function ReloadPhone($phone)
+  {
     $this->result->Log("Reloading SCCP Phone In Asterisk");
     $reloadcmd = 'sudo asterisk -x "sccp restart ' .
-                    $phone->phone_serial . '"';
+      $phone->phone_serial . '"';
 
     $this->result->Log($reloadcmd . "<br>");
 
@@ -73,19 +78,22 @@ class SccpProcessor {
   // Delete Functionality
   //----------------------------------
 
-  public function DeletePhoneAsterisk($phone) {
+  public function DeletePhoneAsterisk($phone)
+  {
     $this->result->Log("<br>DeletePhoneAsterisk() called. Phone: " . $phone->phone_id . "<br>");
     $this->RemoveDevice($phone);
     $this->RemoveButtons($phone);
   }
 
-  private function DeleteLineAsterisk($number) {
+  private function DeleteLineAsterisk($number)
+  {
     $sccpline = new SccpLine();
     $sccpline->LoadFromDB($number->sccpline_id);
     $sccpline->DeleteFromDB();
   }
 
-  private function RemoveDevice($phone) {
+  private function RemoveDevice($phone)
+  {
     $this->result->Log("<br>RemoveDevice() called. Phone: " . $phone->phone_id . "<br>");
     $sccpDevice = new SccpDevice();
 
@@ -97,7 +105,8 @@ class SccpProcessor {
     $phone->SaveToDB();
   }
 
-  private function RemoveButtons($phone) {
+  private function RemoveButtons($phone)
+  {
     $this->result->Log("RemoveButtons()" . $phone->phone_serial . "<br>");
 
     //Call delete all.
@@ -115,7 +124,8 @@ class SccpProcessor {
     }*/
   }
 
-  private function RemoveLine($sccpline) {
+  private function RemoveLine($sccpline)
+  {
     $this->result->Log("RemoveLine() for " . $sccpline->id . "<br>");
 
     $sccpline->DeleteFromDB();
@@ -124,12 +134,14 @@ class SccpProcessor {
     $this->RemoveVoicemail($sccpline);
   }
 
-  private function RemoveSccplineExtensions($sccpline) {
+  private function RemoveSccplineExtensions($sccpline)
+  {
     $this->RemoveExtension($sccpline->id);
   }
   //I could probably do this with cascade delete,
   //but I don't feel like testing.
-  public function RemoveExtensions($number) {
+  public function RemoveExtensions($number)
+  {
     $this->result->Log("RemoveExtensions() for " . $number . "<br>");
 
     $extensionList = new ExtensionList();
@@ -140,7 +152,8 @@ class SccpProcessor {
     }
   }
 
-  private function RemoveVoicemail($sccpline) {
+  private function RemoveVoicemail($sccpline)
+  {
     $this->result->Log("RemoveVoicemail() for " . $sccpline->id . "<br>");
 
     $vm = new Voicemail();
@@ -164,7 +177,8 @@ class SccpProcessor {
   //----------------------------------
 
   //Add phone, line, and buttons.
-  public function AddPhoneAsterisk($phone) {
+  public function AddPhoneAsterisk($phone)
+  {
     $this->result->Log("AddPhoneAsterisk() called.<br><br>");
     //Used for line and buttons.
     $assignmentList = new PhoneNumberAssignmentList();
@@ -175,7 +189,7 @@ class SccpProcessor {
 
     $count = 0;
 
-    foreach ($assignmentList->GetList() As $assignment) {
+    foreach ($assignmentList->GetList() as $assignment) {
 
       $number = $assignment->GetNumber();
 
@@ -207,7 +221,8 @@ class SccpProcessor {
   }
 
   //TODO: See if this can go in PhoneProcessor. It's duped in SipProcessor
-  private function ClearPhoneFlags($phone) {
+  private function ClearPhoneFlags($phone)
+  {
     $phone->altered = 0;
     $phone->added = 0;
     $phone->errored = 0;
@@ -216,7 +231,8 @@ class SccpProcessor {
   }
 
   //TODO: See if this can go in PhoneProcessor.
-  private function ClearNumberFlagsForLinesAdded() {
+  private function ClearNumberFlagsForLinesAdded()
+  {
     foreach ($this->linesAdded as $number) {
       $number->added_number = 0;
       $number->altered_number = 0;
@@ -226,7 +242,8 @@ class SccpProcessor {
   }
 
   //Adds to sccpdevice table and returns SccpDevice
-  private function AddDevice($phone): SccpDevice {
+  private function AddDevice($phone): SccpDevice
+  {
     $sccpDevice = new SccpDevice();
     $sccpDevice->type = $phone->GetPhoneModel()->phone_model_system_name;
     $sccpDevice->description = $phone->GetOrg()->org_name;
@@ -241,7 +258,8 @@ class SccpProcessor {
     return $sccpDevice;
   }
 
-  private function AddDeviceXmlConfig($phone) {
+  private function AddDeviceXmlConfig($phone)
+  {
     $this->result->Log("Copying XML Config - ");
     $defaultXmlFilename = $phone->GetPhoneModel()->xml_config_filename;
 
@@ -258,7 +276,8 @@ class SccpProcessor {
     $this->result->Log("Result (" . $resultNumber . "): " . $resultText . "<br>");
   }
 
-  private function AddLine($phone, $number) {
+  private function AddLine($phone, $number)
+  {
     $include_id_in_insert = true;
 
     $this->result->Log("<br>Add Line: " . $number->number . " " . $number->callerid . "<br>");
@@ -309,7 +328,8 @@ class SccpProcessor {
   }
 
   // TODO: Put this all in the PhoneProcessor.
-  private function AddToExtensions($number, $sccpline) {
+  private function AddToExtensions($number, $sccpline)
+  {
     $dialExtension = new Extension();
     $vmExtension = new Extension();
     //Asterisk doesn't support realtime hints.
@@ -333,16 +353,18 @@ class SccpProcessor {
   }
 
   // TODO: Put this all in the PhoneProcessor.
-  private function AddToVoicemail($phone, $number) {
+  private function AddToVoicemail($phone, $number)
+  {
     $this->result->Log("AddToVoicemail() for " . $number->number . "<br>");
     $vm = new Voicemail();
     $vm->mailbox = $number->number;
-//    $vm->password = $number->number;
+    //    $vm->password = $number->number;
     $vm->fullname = $phone->GetOrg()->org_name;
     $vm->SaveToDB();
   }
 
-  private function AddButton($phone, $assignment, $number, $instance) {
+  private function AddButton($phone, $assignment, $number, $instance)
+  {
     $this->result->Log("Adding Button: " . $number->number . "<br>");
     $button = new ButtonConfig();
     $button->device = $phone->phone_serial;
@@ -376,7 +398,8 @@ class SccpProcessor {
   // Button List Generation
   //---------------------------------------------------------
 
-  private function AddEmptyButtons($phone, $max, $startIndex = 1) {
+  private function AddEmptyButtons($phone, $max, $startIndex = 1)
+  {
     $index = $startIndex;
     $this->result->Log("AddEmptyButtons(Phone, $max, " . $index . ")<br>");
 
@@ -387,7 +410,8 @@ class SccpProcessor {
     }
   }
 
-  private function MakeEmptyButton($phone, $instance) {
+  private function MakeEmptyButton($phone, $instance)
+  {
     $buttonConfig = new ButtonConfig();
     $buttonConfig->device = $phone->phone_serial;
     $buttonConfig->instance = $instance;
@@ -399,7 +423,8 @@ class SccpProcessor {
     return $buttonConfig;
   }
 
-  private function FillEmpty($phone, $count) {
+  private function FillEmpty($phone, $count)
+  {
     $this->result->Log("Fill Unused Number Slots on Phone.<br>");
     $maxNumbers = $phone->GetPhoneModel()->phone_model_max_numbers;
     //$totalToFill = $maxNumbers - $count;
@@ -411,7 +436,8 @@ class SccpProcessor {
 
   }
 
-  private function AddAllLinesAsButtons($phone) {
+  private function AddAllLinesAsButtons($phone)
+  {
     $buttonMax = $phone->GetPhoneModel()->button_list_max;
     $numberList = new NumberList();
     $numberList->LoadAllDisplayableLines();
@@ -463,7 +489,8 @@ class SccpProcessor {
 
   }
 
-  private function AddCustomButton($phone, $number, $instance) {
+  private function AddCustomButton($phone, $number, $instance)
+  {
     $buttonConfig = new ButtonConfig();
     $buttonConfig->instance = $instance;
     $buttonConfig->device = $phone->phone_serial;
@@ -474,7 +501,8 @@ class SccpProcessor {
     $buttonConfig->SaveToDB();
   }
 
-  private function AddNumberArrayToButtonConfig($phone, $array) {
+  private function AddNumberArrayToButtonConfig($phone, $array)
+  {
     //
     $index = 0;
     $startInstance = 1 + $phone->GetPhoneModel()->phone_model_max_numbers;
@@ -495,7 +523,8 @@ class SccpProcessor {
   }
 
 
-  private function FillEmptyNumberArray($size) {
+  private function FillEmptyNumberArray($size)
+  {
     $arr = array();
     $i = 0;
 
@@ -507,7 +536,8 @@ class SccpProcessor {
     return $arr;
   }
 
-  private function AddButtonList($phone, $count) {
+  private function AddButtonList($phone, $count)
+  {
     $this->result->Log("<h2>Add Buttons List - $count</h2>");
 
     if ($phone->GetPhoneModel()->add_button_list == 0) {
@@ -529,7 +559,8 @@ class SccpProcessor {
   //-------------------------------------------
 
   //If line already exists, return it. Otherwise, return null.
-  private function LineAlreadyExists($number) {
+  private function LineAlreadyExists($number)
+  {
     $this->result->Log("Check if LineAlreadyExists: " . $number->sccpline_id . " - ");
     if ($number->sccpline_id == null or $number->sccpline_id == "") {
       $this->result->Log("It does NOT exist.");
@@ -548,7 +579,8 @@ class SccpProcessor {
     return $sccpline;
   }
 
-  private function LineIsModified($number, $sccpline): bool {
+  private function LineIsModified($number, $sccpline): bool
+  {
     //echo "Checking if Line is Modified: " . $number->number . " - " .
     //  $sccpline->id . "<br>";
 
@@ -571,4 +603,4 @@ class SccpProcessor {
 
 
 
- ?>
+?>

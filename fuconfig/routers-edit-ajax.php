@@ -1,6 +1,6 @@
 <?php
 
-include_once('FUConfig.php');
+include_once ('FUConfig.php');
 
 $currentRequest = new PageRequest($_REQUEST);
 

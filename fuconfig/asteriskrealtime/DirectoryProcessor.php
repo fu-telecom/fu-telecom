@@ -1,10 +1,12 @@
 <?php
 
-class DirectoryProcessor {
+class DirectoryProcessor
+{
 
   private $result = null;
 
-  public function ProcessDirectories() {
+  public function ProcessDirectories()
+  {
     //Rewrite to not cooperate with the cli install scripts.
     $this->result = new Result("Directories");
 
@@ -18,7 +20,7 @@ class DirectoryProcessor {
         continue;
 
       $this->result->Log("Processing Directory " . $directory->directory_name .
-                " : " . $directory->directory_filename . "<br>");
+        " : " . $directory->directory_filename . "<br>");
 
       $this->WriteDirectory($directory);
     }
@@ -26,7 +28,8 @@ class DirectoryProcessor {
     return $this->result;
   }
 
-  private function MakeEmptyDirectory($directory) {
+  private function MakeEmptyDirectory($directory)
+  {
     $this->result->Log("Replacing file with empty directory.<br>");
 
     $folder = "/var/www/html/directory/";
@@ -36,7 +39,8 @@ class DirectoryProcessor {
     shell_exec($cmd);
   }
 
-  private function WriteDirectory($directory) {
+  private function WriteDirectory($directory)
+  {
     $numberList = new NumberList();
     $numberList->LoadByDirectory($directory);
 
@@ -54,7 +58,8 @@ class DirectoryProcessor {
     $this->SaveDirectoryFileXml($directory, $xml);
   }
 
-  private function AddNumber($number, &$xml) {
+  private function AddNumber($number, &$xml)
+  {
     $this->result->Log("Adding Number: " . $number->callerid . " - " . $number->number . "<br>");
 
     $entry = $xml->addChild("DirectoryEntry");
@@ -62,28 +67,31 @@ class DirectoryProcessor {
     $entry->addChild("Telephone", $number->number);
   }
 
-  private function GetFileName($directory) {
+  private function GetFileName($directory)
+  {
     $fileName = "/var/www/html/directory/" . $directory->directory_filename;
 
     return $fileName;
   }
 
-  private function GetDirectoryFileXml($directory) {
+  private function GetDirectoryFileXml($directory)
+  {
     $fileName = $this->GetFileName($directory);
     $fileContents = file_get_contents($fileName);
     return simplexml_load_string($fileContents);
   }
 
-  private function SaveDirectoryFileXml($directory, &$xml) {
+  private function SaveDirectoryFileXml($directory, &$xml)
+  {
     //Output with formatting.
-  	$dom = new DOMDocument('1.0');
-  	$dom->preserveWhiteSpace = false;
-  	$dom->formatOutput = true;
-  	$dom->loadXML($xml->asXML());
-  	$dom->save($this->GetFileName($directory));
+    $dom = new DOMDocument('1.0');
+    $dom->preserveWhiteSpace = false;
+    $dom->formatOutput = true;
+    $dom->loadXML($xml->asXML());
+    $dom->save($this->GetFileName($directory));
   }
 }
 
 
 
- ?>
+?>
