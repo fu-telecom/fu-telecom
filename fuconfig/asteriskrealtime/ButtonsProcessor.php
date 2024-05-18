@@ -42,7 +42,6 @@ class ButtonsProcessor
 
     while ($n < count($buttons)) {
       $newLine = $buttons[$n] . "\n";
-      //fprintf($file, '%s\r\n', $extensions[$n]);
       $this->result->Log("Line: " . $newLine . "<br />");
       fwrite($file, $newLine);
       $n = $n + 1;

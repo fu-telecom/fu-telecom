@@ -69,13 +69,6 @@ class SSH
   public function GetOutput()
   {
     $output = "";
-    /*
-    while ($line = fgets($this->stdout)) {
-      $output .= $line;
-      flush();
-
-      //echo $line . "<br/>";
-    }*/
 
     $output = stream_get_contents($this->stdout);
 

@@ -8,7 +8,6 @@ class PhoneModelList extends DataList
 
   public function Setup()
   {
-    //self::LoadPhoneModelList();
   }
 
   public function GetList()

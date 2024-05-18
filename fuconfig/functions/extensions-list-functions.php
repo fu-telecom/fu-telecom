@@ -37,7 +37,6 @@ function WriteExtensionsListFile($extensions)
 
   while ($n < count($extensions)) {
     $newLine = $extensions[$n] . "\n";
-    //fprintf($file, '%s\r\n', $extensions[$n]);
     echo "Line: " . $newLine . "<br />";
     fwrite($file, $newLine);
     $n = $n + 1;
@@ -57,9 +56,6 @@ function ExtensionExists($extensions, $search)
       $exists = true;
     }
   }
-  //echo "Does Extension Exist?";
-  //var_dump($exists);
-  //echo "<br />";
 
   return $exists;
 }
@@ -75,7 +71,6 @@ function RemoveExisting($extensionsList, $existingList)
   foreach ($extensionsList as $extension) {
     if (!ExtensionExists($existingList, $extension)) {
       $completedList[] = $extension;
-      //echo "Adding existing extension: " . $existing;
       echo "Adding Extension: " . $extension . "<br />";
     } else {
       echo "Removing Extension: " . $extension . "<br />";

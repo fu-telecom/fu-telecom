@@ -44,15 +44,10 @@ abstract class DataList
     $dataList = array();
 
     while ($dataRow = $data->fetch()) {
-      //echo "Create New Object of type " . $classname . "<br />";
       $newObj = new $classname;
 
-      //echo "LoadFromDataRow(): <br />";
-      //var_dump($dataRow);
-      //echo "<br /><br />";
       $newObj->LoadFromDataRow($dataRow);
 
-      //echo "Adding to Target List<br /><br /><br />";
       $dataList[] = $newObj;
     }
 
@@ -72,15 +67,10 @@ abstract class DataList
     $data = FUConfig::ExecuteParameterQuery($query, $parameters);
 
     while ($dataRow = $data->fetch()) {
-      //echo "Create New Object of type " . $classname . "<br />";
       $newObj = new $classname;
 
-      //echo "LoadFromDataRow(): <br />";
-      //var_dump($dataRow);
-      //echo "<br /><br />";
       $newObj->LoadFromDataRow($dataRow);
 
-      //echo "Adding to Target List<br /><br /><br />";
       $dataList[] = $newObj;
       $count += 1;
     }

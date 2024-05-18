@@ -58,20 +58,6 @@ class Number extends DataClass
   {
     return $this->numberType ?? $this->LoadDefaultNumberType();
   }
-  /*
-   protected function LoadNumberType() {
-     if ($this->IsLoaded() == false) {
-       trigger_error(
-         'Phone data not loaded:' .
-         ' in ' . $trace[0]['file'] .
-         ' on line ' . $trace[0]['line'],
-         E_USER_ERROR);
-       return null;
-     }
-
-
-     return
-   }*/
 
   public function GetAssignmentByPhone($phone_id)
   {

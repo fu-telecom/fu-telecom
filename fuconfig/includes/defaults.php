@@ -4,21 +4,11 @@ include_once ('FUConfig.php');
 
 class Defaults
 {
-  /*public static $setup;
-   
-   public static function init()
-   {
-     if (self::$setup == NULL)
-             self::$setup = new self();
-
-         return self::$setup;
-   }*/
 
   public function __construct()
   {
     $this->SetDefaults();
     $this->DisplayErrors();
-    //$this->AutoLoadClasses();
   }
 
   public function SetDefaults()

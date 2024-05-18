@@ -101,7 +101,6 @@ class SccpProcessor
       $sccpDevice->DeleteFromDB();
     }
 
-    //$phone->phone_is_deployed = 0;
     $phone->SaveToDB();
   }
 
@@ -112,16 +111,6 @@ class SccpProcessor
     //Call delete all.
     $buttonConfigList = new ButtonConfigList();
     $buttonConfigList->DeleteByDeviceName($phone->phone_serial);
-    /*
-    $buttonConfigList = new ButtonConfigList();
-    $buttonConfigList->LoadByDeviceName($phone->phone_serial);
-
-    if ($buttonConfigList->GetCount() > 0) {
-      foreach ($buttonConfigList->GetList() as $button) {
-        $this->result->Log("Removing Button: " . $button->name . "<br>");
-        $button->DeleteFromDB();
-      }
-    }*/
   }
 
   private function RemoveLine($sccpline)
@@ -202,7 +191,6 @@ class SccpProcessor
 
       //Lines go in sccpline -- once.
       if ($assignment->GetNumberType()->number_type_id == NumberType::LINE) {
-        //$this->result->Log("Adding Line with AddLine() for " . $number->number . "<br>");
         $this->AddLine($phone, $number);
       }
 
@@ -226,7 +214,6 @@ class SccpProcessor
     $phone->altered = 0;
     $phone->added = 0;
     $phone->errored = 0;
-    //$phone->phone_is_deployed = 1;
     $phone->SaveToDB();
   }
 
@@ -332,8 +319,6 @@ class SccpProcessor
   {
     $dialExtension = new Extension();
     $vmExtension = new Extension();
-    //Asterisk doesn't support realtime hints.
-    //$hintsExtension = new Extension();
 
     $dialExtension->context = "default";
     $dialExtension->exten = $number->number;
@@ -358,7 +343,6 @@ class SccpProcessor
     $this->result->Log("AddToVoicemail() for " . $number->number . "<br>");
     $vm = new Voicemail();
     $vm->mailbox = $number->number;
-    //    $vm->password = $number->number;
     $vm->fullname = $phone->GetOrg()->org_name;
     $vm->SaveToDB();
   }
@@ -427,9 +411,6 @@ class SccpProcessor
   {
     $this->result->Log("Fill Unused Number Slots on Phone.<br>");
     $maxNumbers = $phone->GetPhoneModel()->phone_model_max_numbers;
-    //$totalToFill = $maxNumbers - $count;
-
-    //$this->result->Log("Max: $maxNumbers / Count: $count / To Fill: $totalToFill <br>");
 
     if ($count < $maxNumbers)
       $this->AddEmptyButtons($phone, $maxNumbers, $count + 1);
@@ -447,13 +428,6 @@ class SccpProcessor
     $pageSize = $phone->GetPhoneModel()->page_size;
     $pageCount = $buttonListMax / $phone->GetPhoneModel()->page_size;
     $buttonArray = $this->FillEmptyNumberArray($buttonListMax);
-
-    /*
-    $operator = new Number();
-    $operator->callerid = "Operator";
-    $operator->number = 0;
-    $buttonArray[0] = $operator;
-    */
 
     foreach ($numberList->GetList() as $number) {
       $page = floor($index / $pageSize);
@@ -481,7 +455,6 @@ class SccpProcessor
       $this->result->Log("Adding number to page $page for button array at $targetPos<br>");
       $buttonArray[$targetPos] = $number;
 
-      //$this->AddNumberToButtonArray($number, $targetPos, $buttonArray);
       $index++;
     }
 
@@ -497,7 +470,6 @@ class SccpProcessor
     $buttonConfig->type = "speeddial";
     $buttonConfig->name = $number->callerid;
     $buttonConfig->options = $number->number;
-    //$buttonConfig->options = $number->number . "," . $number->number . "@hints";
     $buttonConfig->SaveToDB();
   }
 
@@ -518,7 +490,6 @@ class SccpProcessor
 
       $index++;
     }
-    //$targetPos += $phone->GetPhoneModel()->phone_model_max_numbers;
 
   }
 
@@ -581,9 +552,6 @@ class SccpProcessor
 
   private function LineIsModified($number, $sccpline): bool
   {
-    //echo "Checking if Line is Modified: " . $number->number . " - " .
-    //  $sccpline->id . "<br>";
-
     if ($number->number != $sccpline->id)
       return false;
 

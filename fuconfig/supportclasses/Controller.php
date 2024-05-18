@@ -18,7 +18,6 @@ class Controller
 
   public function __get($name)
   {
-    //echo "Getting '$name'\n";
     if (array_key_exists($name, $this->data)) {
       return $this->data[$name];
     }
@@ -28,20 +27,17 @@ class Controller
 
   public function __set($name, $value)
   {
-    //echo "Setting '$name' to '$value'\n";
     $this->data[$name] = $value;
 
   }
 
   public function __isset($name)
   {
-    //echo "Is '$name' set?\n";
     return isset($this->data[$name]);
   }
 
   public function __unset($name)
   {
-    //echo "Unsetting '$name'\n";
     unset($this->data[$name]);
   }
 

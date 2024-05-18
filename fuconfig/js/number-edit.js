@@ -39,13 +39,6 @@ function handleNumberEditFormSubmit(xml) {
 
     reloadPhoneNumbers(phoneid);
 
-    //$(xml).find('updateList').each (function() {
-    //var currentPhoneId = $(this).text();
-    //reloadPhoneNumbers(currentPhoneId);
-
-    //});
-
-
   }
 }
 
@@ -126,7 +119,6 @@ function deleteNumber(phoneId, numberId, assignmentId) {
   })
     .done(function (xml) {
       var phoneid = $(xml).find('phone_id').text();
-      //var deleted_all = $(xml).find('deleted_all').text();
 
       reloadPhoneNumbers(phoneid);
     })

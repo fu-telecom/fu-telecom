@@ -41,7 +41,6 @@ class SccpLine extends DataClass
   {
     $query = "SELECT * FROM asteriskrealtime.sccpline WHERE id LIKE :id";
     $parameters = array(":id" => $number);
-    //echo "Load By Number: " . $number . "<br>";
     return $this->LoadFromQueryParameters($query, $parameters);
   }
 }

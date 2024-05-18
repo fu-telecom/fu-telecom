@@ -84,7 +84,6 @@ $addRequest->SetCreate();
             }
 
             //Set the ID field for buttons.
-            //$updateAvailableButton->SetID($inventoryPhone->phone_inventory_id);
             $reviewRequest->SetID($inventoryPhone->phone_inventory_id);
             $deleteRequest->SetID($inventoryPhone->phone_inventory_id);
 
@@ -104,13 +103,11 @@ $addRequest->SetCreate();
             //If this phone is set to available, this request can turn it to unavailable or vice-versa.
             if ($inventoryPhone->phone_inventory_available == 1) {
               //Is available, set to unavailable if processed.
-              //$updateAvailableButton->SetVar('phone_inventory_available', 0);
               $updateAvailableData->phone_inventory_available = 0;
               $updateAvailableButton->SetDisplayColor(ButtonRequest::SUCCESS);
               $updateAvailableButton->SetButtonLabel("Available");
             } else {
               //Is unavailable, set to available if processed.
-              //$updateAvailableRequest->SetVar('phone_inventory_available', 1);
               $updateAvailableData->phone_inventory_available = 1;
               $updateAvailableButton->SetDisplayColor(ButtonRequest::DANGER);
               $updateAvailableButton->SetButtonLabel("Not Available");

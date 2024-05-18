@@ -81,12 +81,6 @@ class PhoneNumberAssignmentList extends DataList
 
     $this->LoadListFromQueryParameters($query, "PhoneNumberAssignment", $parameters);
   }
-
-
-
-  //public function GetByNumberId($number_id) {
-  //
-  //}
 }
 
 

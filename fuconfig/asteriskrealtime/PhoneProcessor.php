@@ -186,7 +186,6 @@ class PhoneProcessor extends Controller
   {
     $this->Log("<br>Cleaning up deleted items.<br>");
     $this->CleanupAssignments();
-    //$this->CleanupNumbers();
     $this->CleanupPhones();
   }
 
@@ -205,17 +204,6 @@ class PhoneProcessor extends Controller
       $assignment->DeleteFromDB();
     }
   }
-
-  //Commented for now, as numbers get deleted
-  //when they no longer have assignments.
-  /*private function CleanupNumbers() {
-    $numberList = new NumberList();
-    $numberList->LoadMarkedForDeletion();
-
-    foreach ($numberList->GetList() as $number) {
-      $number->DeleteFromDB();
-    }
-  }*/
 
   //Warning: This will delete phones without checking phone_is_deployed
   private function CleanupPhones()

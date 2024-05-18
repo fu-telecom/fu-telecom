@@ -36,8 +36,6 @@ if ($currentRequest->IsCreateRequest()) {
   $assignment->LoadByPhoneAndNumber($currentRequest->phone_id, $currentRequest->number_id);
 
   //Can add max count comparison later.
-  //$phone = Phone::LoadPhoneByID($currentRequest->phone_id);
-  //$maxCount = $phone->GetPhoneModel()->phone_model_max_numbers;
 
 } else {
   $trace = debug_backtrace();

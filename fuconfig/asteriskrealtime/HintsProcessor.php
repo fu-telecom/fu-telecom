@@ -59,7 +59,6 @@ class HintsProcessor
 
     while ($n < count($hints)) {
       $newLine = $hints[$n] . "\n";
-      //fprintf($file, '%s\r\n', $extensions[$n]);
       $this->result->Log("Line: " . $newLine . "<br />");
       fwrite($file, $newLine);
       $n = $n + 1;

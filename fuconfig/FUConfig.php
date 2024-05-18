@@ -32,7 +32,6 @@ class FUConfig
   public function AutoLoadDataClasses()
   {
     spl_autoload_register(function ($class) {
-      //echo $class . "<br>";
       $classFile = __DIR__ . '/dataclasses/' . $class . '.php';
       if (is_file($classFile))
         include $classFile;
@@ -42,7 +41,6 @@ class FUConfig
   public function AutoLoadSupportClasses()
   {
     spl_autoload_register(function ($class) {
-      //echo $class . "<br>";
       $classFile = __DIR__ . '/supportclasses/' . $class . '.php';
       if (is_file($classFile))
         include $classFile;
@@ -52,14 +50,12 @@ class FUConfig
   public function AutoLoadAsteriskClasses()
   {
     spl_autoload_register(function ($class) {
-      //echo $class . "<br>";
       $classFile = __DIR__ . '/asteriskrealtime/' . $class . '.php';
       if (is_file($classFile))
         include $classFile;
     });
 
     spl_autoload_register(function ($class) {
-      //echo $class . "<br>";
       $classFile = __DIR__ . '/asteriskdataclasses/' . $class . '.php';
       if (is_file($classFile))
         include $classFile;
@@ -69,7 +65,6 @@ class FUConfig
   public function AutoLoadRouterClasses()
   {
     spl_autoload_register(function ($class) {
-      //echo $class . "<br>";
       $classFile = __DIR__ . '/routersupport/' . $class . '.php';
       if (is_file($classFile))
         include $classFile;

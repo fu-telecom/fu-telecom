@@ -37,9 +37,6 @@ function removeRouter(routerId) {
     dataType: 'xml'
   })
     .done(function (formData) {
-      //var routerid = $(xml).find('router_id').text();
-
-      //reloadRouter(routerid);
       window.location.reload(false);
     })
     .fail(function (jqXHR, textStatus) {
@@ -54,7 +51,6 @@ function processRouterUpdate(routerId) {
   $("#btnTryAgainRouterUpdate").click(function () {
     sendRouterUpdateRequest(routerId);
   });
-  //$("#btnTryAgainRouterUpdate").hide();
 
   sendRouterUpdateRequest(routerId);
 

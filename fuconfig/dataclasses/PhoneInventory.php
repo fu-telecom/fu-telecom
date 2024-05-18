@@ -9,18 +9,6 @@ class PhoneInventory extends DataClass
   //Related through the phone table.
   private $org = null;
 
-  //Create empty class with default values.
-  /*public function CreateEmpty() {
-     $this->phone_inventory_id = "";
-     $this->phone_inventory_tag = "";
-     $this->phone_inventory_serial = "";
-     $this->phone_inventory_type_id = "";
-     $this->phone_inventory_model_id = "";
-     $this->phone_inventory_available = 1;
-
-     $this->isnew = true;
-   }*/
-
   public function Setup()
   {
     //These 3 variables are used for generic DB update statements.

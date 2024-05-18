@@ -156,9 +156,6 @@ class SipProcessor
   {
     $dialExtension = new Extension();
     $vmExtension = new Extension();
-    //Asterisk doesn't support realtime hints.
-    //$hintsExtension = new Extension();
-
 
     $dialExtension->context = "default";
     $dialExtension->exten = $number->number;
@@ -180,7 +177,6 @@ class SipProcessor
     $this->result->Log("AddToVoicemail() for " . $number->number . "<br>");
     $vm = new Voicemail();
     $vm->mailbox = $number->number;
-    // $vm->password = $number->number;
     $vm->fullname = $phone->GetOrg()->org_name;
     $vm->SaveToDB();
   }
@@ -190,7 +186,6 @@ class SipProcessor
     $phone->altered = 0;
     $phone->added = 0;
     $phone->errored = 0;
-    //$phone->phone_is_deployed = 1;
     $phone->SaveToDB();
   }
 

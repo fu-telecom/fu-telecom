@@ -25,7 +25,6 @@ class RouterHandler extends Controller
     $this->router_id = $router->router_id;
     $this->error = 0;
     $this->message = "";
-    //$this->trace = ""; //GetTrace returns array. Error.
     $this->script_update = 0;
     $this->channel_update = 0;
     $this->version = 0;
@@ -57,16 +56,13 @@ class RouterHandler extends Controller
     } catch (Exception $e) {
       $this->error = 1;
       $this->message = $e->getMessage();
-      //$this->trace = $e->getTrace(); //ERROR this is an array.
     }
   }
 
   private function Update()
   {
-    //echo "Connecting to: " . $this->router->GetIP() . "<br>";
 
     if ($this->ScriptUpdateRequired()) {
-      //echo "Script Update Required.<br>";
       $this->script_update = 1;
 
       $this->SendDlinkInstallFile();
@@ -75,7 +71,6 @@ class RouterHandler extends Controller
     }
 
     if ($this->ChannelUpdateRequired()) {
-      //echo "Channel Update Required<br>";
       $this->channel_update = 1;
       $this->ExecuteInstallFile();
     }
@@ -108,15 +103,12 @@ class RouterHandler extends Controller
 
     $this->current_24 = $this->router->channel_24_current;
     $this->current_5 = $this->router->channel_5_current;
-    //echo "Current 2.4ghz Channel Setting: " . $this->router->channel_24_current . "<br>";
-    //echo "Current 5ghz Channel Setting: " . $this->router->channel_5_current . "<br>";
 
     $this->router->SaveToDB();
   }
 
   private function GetChannelFromUci($uci)
   {
-    //wireless.radio0.channel=11
     $result = explode("=", $uci);
     return (int) $result[1];
   }
@@ -134,8 +126,6 @@ class RouterHandler extends Controller
 
     $this->ssh->Execute($cmd);
     $this->ssh->GetLongOutput(); //This includes a timeout feature.
-    //$this->execute_result = $this->ssh->GetOutput();
-    //echo $this->ssh->GetOutput();
   }
 
   private function ScriptUpdateRequired(): bool
@@ -151,7 +141,6 @@ class RouterHandler extends Controller
   private function SendDlinkInstallFile()
   {
     $createMode = 0775;
-    //echo "Sending Dlink install File<br>";
 
     $this->ssh->SendFile(self::LOCAL_SCRIPT, self::REMOTE_SCRIPT, $createMode);
   }
@@ -163,7 +152,6 @@ class RouterHandler extends Controller
 
     $version = trim($this->ssh->GetOutput());
 
-    //echo "Version: " . $version . "<br>";
     $this->version = $version;
 
     return $version;

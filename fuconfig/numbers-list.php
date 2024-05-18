@@ -37,8 +37,7 @@ $numberList->LoadByPhoneAssignment($phone->phone_id);
           $assignment = $number->GetAssignmentByPhone($phone->phone_id);
           $assignmentType = $assignment->GetNumberType();
           $numberType = $assignment->GetNumber()->GetDefaultNumberType();
-          //$numberType = $number->GetNumberTypeByPhone($phone->phone_id);
-      
+
           //CSS determination
           $cellClass = $assignment->todelete_assignment == 1 ? 'strikeout' : '';
           $deleteBtnClass = $assignment->todelete_assignment == 1 ? 'btn-danger' : 'btn-warning';

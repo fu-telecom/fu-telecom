@@ -1,10 +1,6 @@
 <?php
 
 include_once ('FUConfig.php');
-/*
-include_once('includes/defaults.php');
-include_once('includes/db.php'); 
-*/
 
 $currentRequest = new PageRequest($_REQUEST);
 

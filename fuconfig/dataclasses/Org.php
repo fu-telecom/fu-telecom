@@ -27,8 +27,6 @@ class Org extends DataClass
 
     //Not sure this is necessary. 
     //TODO: Remove if not needed.
-    //$this->PhoneList = new PhoneList();
-    //$this->PhoneList->ParentOrg = $this;
   }
 
 

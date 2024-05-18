@@ -148,7 +148,6 @@ abstract class DataClass
     if (!$pageRequest->IsCreateRequest()) {
       $this->data[$this->tableIdField] = $pageRequest->GetID();
       $this->isnew = false;
-      //echo "LoadFromPageRequest: Setting ID field " . $this->tableIdField . " to " . $pageRequest->GetID() . "<br />";
     } else {
       $this->isnew = true;
     }
@@ -157,7 +156,6 @@ abstract class DataClass
 
       if ($pageRequest->__isset($field)) {
         $this->data[$field] = $pageRequest->GetRequestData($field);
-        //echo "LoadFromPageRequest: Setting " . $field . " to " . $pageRequest->GetRequestData($field) . "<br />";
       }
     }
 
@@ -194,11 +192,6 @@ abstract class DataClass
     $query = $this->GetUpdateStatement();
     $parameters = $this->GetAllParameters(true);
 
-    /*echo "<br /><br />Query: <br/>" . $query . "<br /><br />";
-      echo "Parameters: <br />";
-      var_dump($parameters);
-      echo "<br /><br />";*/
-
     $this->ExecuteQueryParameters($query, $parameters);
 
     $this->saved = true;
@@ -227,7 +220,6 @@ abstract class DataClass
     $this->ExecuteQueryParameters($query, $parameters, $getLastInsertId);
 
     //Set ID Field of newly inserted object.
-    //$this->data[$this->tableIdField] = FUConfig::$pdo->lastInsertId();
 
     $this->saved = true;
     $this->isnew = false;
@@ -276,20 +268,15 @@ abstract class DataClass
   {
     $fieldList = "";
 
-    //echo "<br /><br />";
-
     foreach ($this->tableFields as $field => $value) {
       if ($includeId == false and $this->tableIdField == $field) {
-        //echo "Skipping ID Field.<br />";
         continue;
       }
 
       if (strlen($fieldList) > 0)
         $fieldList .= ", ";
 
-      //echo "Adding: " . $field . "<br />";
       $fieldList .= "`" . $field . "`";
-      //echo $fieldList . "<br /><br />";
     }
 
     return $fieldList;
@@ -430,14 +417,12 @@ abstract class DataClass
       return null;
     }
 
-    //echo "Setting '$name' to '$value'\n";
     $this->data[$name] = $value;
     $this->saved = false; //Unset saved flag after data is modified.
   }
 
   public function __get($name)
   {
-    //echo "Getting '$name'\n";
     if (array_key_exists($name, $this->data)) {
       return $this->data[$name];
     }
@@ -455,14 +440,12 @@ abstract class DataClass
   /**  As of PHP 5.1.0  */
   public function __isset($name)
   {
-    //echo "Is '$name' set?\n";
     return isset($this->data[$name]);
   }
 
   /**  As of PHP 5.1.0  */
   public function __unset($name)
   {
-    //echo "Unsetting '$name'\n";
     unset($this->data[$name]);
   }
 

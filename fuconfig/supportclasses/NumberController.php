@@ -49,14 +49,6 @@ class NumberController extends Controller
 
     $this->isnew = $isnew;
 
-    /*
-        //This is likely not needed anymore. Changed to Controller.
-        //TODO: This is a bad way to use the PageRequest.
-        //TODO: IN FACT! The PageRequest needs to be redone to have a separate REQUEST variable array and the
-        //		submitVars needs to be the primary data reader for the magic methods.
-        //Basically, this is off.
-        $this->pageRequest = array();
-    */
     $this->setupComplete = true;
 
   }
@@ -81,15 +73,11 @@ class NumberController extends Controller
 
     if ($pageRequest->IsCreateRequest()) {
       $this->SetCreate();
-      //$this->Setup($pageRequest->phone_id, $pageRequest->caller_id, $pageRequest->number, $pageRequest->directory_id,
-      //				$pageRequest->number_type_id, $pageRequest->isnew, $pageRequest->number_id);
     } else if ($pageRequest->IsUpdateRequest()) {
       $this->SetUpdate();
 
     } else if ($pageRequest->IsDeleteRequest()) {
       $this->SetDelete();
-      //$this->Setup($pageRequest->phone_id, $pageRequest->number_id, null, null,
-      //				null, null, null, $pageRequest->phone_number_assignment_id);
     } else {
 
     }
@@ -209,20 +197,6 @@ class NumberController extends Controller
 
     return true;
   }
-
-  /*//Check to see if callerid and number input fields are valid.
-   private function InputIsValidExisting(): bool {
-
-     if (strlen($this->number_id) == 0 Or strlen($this->callerid) == 0 Or !filter_var($this->number, FILTER_VALIDATE_INT))
-     {
-       //Not valid!
-       $this->format_problem = 1; //Indicate a format error.
-       echo "Bad Input<br />";
-       return false;
-     }
-
-     return true;
-   }*/
 
   private function NumberAlreadyExists(): bool
   {

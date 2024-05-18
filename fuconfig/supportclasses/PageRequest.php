@@ -216,7 +216,6 @@ class PageRequest
 
   public function __get($name)
   {
-    //echo "Getting '$name'\n";
     if (array_key_exists($name, $this->pageRequest)) {
       return $this->pageRequest[$name];
     }
@@ -227,14 +226,12 @@ class PageRequest
   /**  As of PHP 5.1.0  */
   public function __isset($name)
   {
-    //echo "Is '$name' set?\n";
     return isset($this->pageRequest[$name]);
   }
 
   /**  As of PHP 5.1.0  */
   public function __unset($name)
   {
-    //echo "Unsetting '$name'\n";
     unset($this->pageRequest[$name]);
   }
 

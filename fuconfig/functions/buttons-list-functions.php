@@ -64,9 +64,6 @@ function RemoveExistingButtons($buttonsList, $existingNumbersList)
 {
   $completedList = array();
   echo "<b>Removing Old Buttons: </b><br />";
-  //echo "Existing Buttons List: ";
-  //var_dump($existingNumbersList);
-  //echo "<br />";
 
   foreach ($buttonsList as $button) {
     if (!ButtonExists($existingNumbersList, $button)) {
@@ -110,11 +107,7 @@ function ProcessButtonsList($linesToAdd, $numbersToRemove)
   $create7965 = "/asterisk_scripts/buttons_list/buttons-list-7965.sh";
   $create7960 = "/asterisk_scripts/buttons_list/buttons-list-7960.sh";
 
-  //echo "<b>Replacing 7965 button file </b><br />";
-  //echo "<pre>" . shell_exec($create7965) . "</pre><br />";
 
-  //echo "<b>Replacing 7960 button file </b><br />";
-  //echo "<pre>" . shell_exec($create7960) . "</pre><br />";
 
 
 }

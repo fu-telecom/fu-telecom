@@ -8,7 +8,6 @@ class NumberTypeList extends DataList
 
   public function Setup()
   {
-    //self::LoadNumberTypeList();
   }
 
   //Override GetList for static usage. 

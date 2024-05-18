@@ -10,7 +10,6 @@ $hintsProcessor = new HintsProcessor();
 $buttonsProcessor = new ButtonsProcessor();
 
 $processor = new PhoneProcessor($resultProcessor);
-//$processor->ResetAllAsteriskData();
 $processor->ProcessAllPhones();
 
 $resultProcessor->AddResult($directoryProcessor->ProcessDirectories());
