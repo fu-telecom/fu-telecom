@@ -87,12 +87,12 @@ if ($routerList->GetCount() > 0) { ?>
 
           <div class="col">
             <div class="row justify-content-end px-4 pt-1">
-              <a id="btnChangeChannels" class="btn btn-success p-1 m-1" onClick="editRouter(<?= $router->router_id ?>)"
-                href="#">Set Channels</a>
-              <a id="btnUpdateRouter" class="btn btn-info p-1 m-1" onClick="processRouterUpdate(<?= $router->router_id ?>)"
-                href="#">Update Router</a>
-              <a id="btnRemoveRouter" class="btn btn-warning p-1 m-1" onClick="removeRouter(<?= $router->router_id ?>)"
-                href="#">Remove Router</a>
+              <a id="btnChangeChannels" class="btn btn-success p-1 m-1" onClick="editRouter(<?= $router->router_id ?>)">Set
+                Channels</a>
+              <a id="btnUpdateRouter" class="btn btn-info p-1 m-1"
+                onClick="processRouterUpdate(<?= $router->router_id ?>)">Update Router</a>
+              <a id="btnRemoveRouter" class="btn btn-warning p-1 m-1"
+                onClick="removeRouter(<?= $router->router_id ?>)">Remove Router</a>
             </div>
           </div>
 
