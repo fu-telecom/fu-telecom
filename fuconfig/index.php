@@ -36,7 +36,7 @@ $phoneNumberAssignmentList->LoadAll();
   </div>
   <?php
   foreach ($orgList->GetList() as $currentOrg) {
-    include ('organizations-list.php');
+    include ('orgs-list.php');
   } ?>
 </div>
 
