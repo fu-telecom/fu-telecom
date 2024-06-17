@@ -9,9 +9,11 @@ $extensionsProcessor = new ExtensionsProcessor();
 $hintsProcessor = new HintsProcessor();
 $buttonsProcessor = new ButtonsProcessor();
 
+// Update Asterisk Realtime database
 $processor = new PhoneProcessor($resultProcessor);
 $processor->ProcessAllPhones();
 
+// Write files
 $resultProcessor->AddResult($directoryProcessor->ProcessDirectories());
 $resultProcessor->AddResult($extensionsProcessor->ProcessExtensions());
 $resultProcessor->AddResult($hintsProcessor->ProcessHints());
